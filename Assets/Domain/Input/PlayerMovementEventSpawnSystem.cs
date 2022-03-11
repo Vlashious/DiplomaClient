@@ -1,7 +1,8 @@
-﻿using Leopotam.EcsLite;
+﻿using Domain.Player;
+using Leopotam.EcsLite;
 using Unity.Mathematics;
 
-namespace Domain.Player.Input
+namespace Domain.Input
 {
     public sealed class PlayerMovementEventSpawnSystem : IEcsRunSystem
     {

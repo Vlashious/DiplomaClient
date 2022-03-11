@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b27c2a752684b83a1bfd360743d5910, type: 3}
   m_Name: PrefabProvider
   m_EditorClassIdentifier: 
-  Player: {fileID: 8009310997124818155, guid: 9030cd140356ad749b19b7b5a20221d6, type: 3}
+  Player: {fileID: 2141670470758102171, guid: 9030cd140356ad749b19b7b5a20221d6, type: 3}

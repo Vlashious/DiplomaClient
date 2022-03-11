@@ -1,6 +1,6 @@
 ﻿using System;
+using Domain.Input;
 using Domain.Player;
-using Domain.Player.Input;
 using Domain.Providers;
 using Leopotam.EcsLite;
 using VContainer.Unity;

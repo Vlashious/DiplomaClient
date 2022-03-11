@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Domain.Player.Input
+namespace Domain.Input
 {
     public struct TransformComponent
     {

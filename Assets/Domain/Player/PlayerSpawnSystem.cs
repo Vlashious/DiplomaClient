@@ -1,4 +1,4 @@
-﻿using Domain.Player.Input;
+﻿using Domain.Input;
 using Domain.Providers;
 using Leopotam.EcsLite;
 using UnityEngine;
@@ -16,12 +16,12 @@ namespace Domain.Player
 
         public void Init(EcsSystems systems)
         {
-            GameObject player = Object.Instantiate(_prefabProvider.Player);
+            PlayerProvider player = Object.Instantiate(_prefabProvider.Player);
             EcsWorld world = systems.GetWorld();
             int entity = world.NewEntity();
             world.GetPool<PlayerTag>().Add(entity);
             ref TransformComponent transformComponent = ref world.GetPool<TransformComponent>().Add(entity);
-            transformComponent = new TransformComponent(player.transform);
+            transformComponent = new TransformComponent(player.Transform);
         }
     }
 }

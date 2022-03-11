@@ -1,13 +1,14 @@
 ﻿using Unity.Mathematics;
 
-namespace Domain.Player.Input
+namespace Domain.Input
 {
-    public struct RotationInputEvent
+    public struct MovementInputEvent
     {
-        public RotationInputEvent(float3 direction)
+        public MovementInputEvent(float3 direction)
         {
             Direction = direction;
         }
+
         public float3 Direction { get; }
     }
 }

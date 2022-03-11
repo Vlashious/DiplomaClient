@@ -2,7 +2,7 @@
 using Leopotam.EcsLite;
 using UnityEngine;
 
-namespace Domain.Player.Input
+namespace Domain.Input
 {
     public sealed class MovementSystem : IEcsRunSystem
     {

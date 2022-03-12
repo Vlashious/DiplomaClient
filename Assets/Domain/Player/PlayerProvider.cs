@@ -6,6 +6,7 @@ namespace Domain.Player
     {
         public Transform Transform;
         public CharacterController CharacterController;
+        public Animator Animator;
         public GameObject CameraFollow;
     }
 }

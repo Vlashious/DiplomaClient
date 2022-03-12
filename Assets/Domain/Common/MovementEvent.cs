@@ -1,12 +1,12 @@
 ﻿using Unity.Mathematics;
 
-namespace Domain.Player
+namespace Domain.Common
 {
-    public struct PlayerMovementEvent
+    public struct MovementEvent
     {
         public float3 Direction { get; }
 
-        public PlayerMovementEvent(float3 direction)
+        public MovementEvent(float3 direction)
         {
             Direction = direction;
         }

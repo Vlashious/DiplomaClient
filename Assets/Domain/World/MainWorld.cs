@@ -1,6 +1,7 @@
 ﻿using System;
 using Domain.Player;
 using Domain.Providers;
+using Domain.Utils;
 using Leopotam.EcsLite;
 using VContainer.Unity;
 
@@ -10,13 +11,15 @@ namespace Domain.World
     {
         private readonly PrefabProvider _prefabProvider;
         private readonly ConfigProvider _configProvider;
+        private readonly UtilCamera _utilCamera;
         private EcsWorld _ecsWorld;
         private EcsSystems _ecsSystems;
 
-        public MainWorld(PrefabProvider prefabProvider, ConfigProvider configProvider)
+        public MainWorld(PrefabProvider prefabProvider, ConfigProvider configProvider, UtilCamera utilCamera)
         {
             _prefabProvider = prefabProvider;
             _configProvider = configProvider;
+            _utilCamera = utilCamera;
         }
 
         public void Initialize()
@@ -24,8 +27,7 @@ namespace Domain.World
             _ecsWorld = new EcsWorld();
             _ecsSystems = new EcsSystems(_ecsWorld);
 
-            _ecsSystems.Add(new PlayerMovementSpawnSystem())
-                       .Add(new PlayerSystem(_prefabProvider, _configProvider))
+            _ecsSystems.Add(new PlayerSystem(_prefabProvider, _configProvider, _utilCamera))
                        .Init();
         }
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using Domain.Input;
 using Domain.Player;
 using Domain.Providers;
 using Leopotam.EcsLite;
@@ -25,9 +24,8 @@ namespace Domain.World
             _ecsWorld = new EcsWorld();
             _ecsSystems = new EcsSystems(_ecsWorld);
 
-            _ecsSystems.Add(new PlayerSpawnSystem(_prefabProvider))
-                       .Add(new PlayerMovementEventSpawnSystem())
-                       .Add(new MovementSystem(_configProvider))
+            _ecsSystems.Add(new PlayerMovementSpawnSystem())
+                       .Add(new PlayerSystem(_prefabProvider, _configProvider))
                        .Init();
         }
 

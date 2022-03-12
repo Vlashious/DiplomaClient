@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Cinemachine;
+using UnityEngine;
 
 namespace Domain.Player
 {
@@ -7,6 +8,6 @@ namespace Domain.Player
         public Transform Transform;
         public CharacterController CharacterController;
         public Animator Animator;
-        public GameObject CameraFollow;
+        public CinemachineFreeLook FreeLookCamera;
     }
 }

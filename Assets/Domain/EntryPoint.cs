@@ -1,3 +1,4 @@
+using Domain.Player;
 using Domain.Providers;
 using Domain.Utils;
 using Domain.World;
@@ -19,9 +20,15 @@ namespace Domain
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterComponent(_utilCamera);
-            builder.RegisterComponent(_prefabProvider);
-            builder.RegisterComponent(_configProvider);
+            builder.RegisterInstance(_prefabProvider);
+            builder.RegisterInstance(_configProvider);
+            RegisterSystems(builder);
             builder.UseEntryPoints(Lifetime.Singleton, pointsBuilder => { pointsBuilder.Add<MainWorld>(); });
+        }
+
+        private void RegisterSystems(IContainerBuilder builder)
+        {
+            builder.Register<PlayerSystem>(Lifetime.Singleton);
         }
     }
 }

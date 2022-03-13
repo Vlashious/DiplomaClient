@@ -7,12 +7,22 @@ namespace Domain.Player
         public Transform Transform;
         public CharacterController CharacterController;
         public Animator Animator;
-        public PlayerControls PlayerInput;
+        public PlayerInputs PlayerInput;
 
         private void Awake()
         {
-            PlayerInput = new PlayerControls();
+            PlayerInput = new();
             PlayerInput.Enable();
+        }
+
+        private void OnEnable()
+        {
+            PlayerInput.Enable();
+        }
+
+        private void OnDisable()
+        {
+            PlayerInput.Disable();
         }
     }
 }

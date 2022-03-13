@@ -6,7 +6,5 @@ namespace Domain.Providers
     public sealed class ConfigProvider : ScriptableObject
     {
         public float PlayerSpeed;
-        public float PlayerJumpHeight;
-        public float Gravity;
     }
 }

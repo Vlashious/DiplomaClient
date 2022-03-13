@@ -1,5 +1,4 @@
-﻿using Cinemachine;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Domain.Player
 {
@@ -8,6 +7,12 @@ namespace Domain.Player
         public Transform Transform;
         public CharacterController CharacterController;
         public Animator Animator;
-        public CinemachineFreeLook FreeLookCamera;
+        public PlayerControls PlayerInput;
+
+        private void Awake()
+        {
+            PlayerInput = new PlayerControls();
+            PlayerInput.Enable();
+        }
     }
 }

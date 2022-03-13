@@ -28,9 +28,7 @@ namespace Domain.World
             _ecsSystems = new EcsSystems(_ecsWorld);
 
             _ecsSystems.Add(new PlayerSystem(_prefabProvider, _configProvider, _utilCamera))
-                       .Add(new CameraRotationSystem())
-                       .Add(new PlayerJumpSystem())
-                       .Add(new PlayerGravitySystem())
+                       .Add(new PlayerJumpSystem(_configProvider))
                        .Init();
         }
 

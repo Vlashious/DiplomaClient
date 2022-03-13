@@ -1,13 +1,8 @@
 {
-    "name": "Domain",
+    "name": "InputControlsAssembly",
     "rootNamespace": "",
     "references": [
-        "GUID:b0214a6008ed146ff8f122a6a9c2f6cc",
-        "GUID:e59bf9fc7d5a44b18a819a92edd46163",
-        "GUID:d8b63aba1907145bea998dd612889d6b",
-        "GUID:4307f53044263cf4b835bd812fc161a4",
-        "GUID:75469ad4d38634e559750d17036d5f7c",
-        "GUID:77712438864f48c45a13f5dfedcc9ac6"
+        "GUID:75469ad4d38634e559750d17036d5f7c"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

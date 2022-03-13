@@ -1,0 +1,45 @@
+{
+    "name": "CameraLookControls",
+    "maps": [
+        {
+            "name": "CameraLook",
+            "id": "223a4686-4067-4b17-bebd-5f0fd5d39172",
+            "actions": [
+                {
+                    "name": "Look",
+                    "type": "PassThrough",
+                    "id": "4b3ddd73-3cad-4eb1-ad63-3568e960b135",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "10edfb82-2433-449e-8fb7-69cf1e151b59",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "462cb5e1-ce59-4a3f-8c51-8bc5d1e64808",
+                    "path": "<Touchscreen>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

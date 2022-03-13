@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Domain.Providers
 {
@@ -7,5 +6,7 @@ namespace Domain.Providers
     public sealed class ConfigProvider : ScriptableObject
     {
         public float PlayerSpeed;
+        public float PlayerJumpHeight;
+        public float Gravity;
     }
 }

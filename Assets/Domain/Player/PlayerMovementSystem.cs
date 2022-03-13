@@ -1,5 +1,4 @@
-﻿using Domain.Common;
-using Domain.Providers;
+﻿using Domain.Providers;
 using Domain.Utils;
 using Leopotam.EcsLite;
 using Unity.Mathematics;
@@ -34,29 +33,25 @@ namespace Domain.Player
         public void Run(EcsSystems systems)
         {
             EcsWorld world = systems.GetWorld();
-            float horizontalInput = Input.GetAxisRaw("Horizontal");
-            float verticalInput = Input.GetAxisRaw("Vertical");
-            var direction = new float3(horizontalInput, 0, verticalInput);
-            direction = math.normalizesafe(direction);
-
-            bool isMoving = math.lengthsq(direction) > 0.1;
 
             foreach (int entity in world.Filter<PlayerComponent>().End())
             {
                 ref PlayerComponent player = ref world.GetPool<PlayerComponent>().Get(entity);
+                var movementEvent = player.Player.PlayerInput.PlayerMovement.Move.ReadValue<Vector2>();
+
+                bool isMoving = math.lengthsq(movementEvent) > 0.1f;
+
                 player.Player.Animator.SetBool("IsMoving", isMoving);
-            }
 
-            if (!isMoving)
-            {
-                return;
-            }
+                if (!isMoving)
+                {
+                    continue;
+                }
 
-            foreach (int entity in world.Filter<PlayerComponent>().End())
-            {
-                ref PlayerComponent player = ref world.GetPool<PlayerComponent>().Get(entity);
                 Transform transform = player.Player.Transform;
-                float targetAngle = math.degrees(math.atan2(direction.x, direction.z)) + _utilCamera.Camera.transform.eulerAngles.y;
+
+                float targetAngle = math.degrees(math.atan2(movementEvent.x, movementEvent.y)) +
+                                    _utilCamera.Camera.transform.eulerAngles.y;
 
                 transform.rotation = Quaternion.Euler(0, targetAngle, 0);
                 float3 moveDirection = math.normalizesafe(Quaternion.Euler(0, targetAngle, 0) * Vector3.forward);

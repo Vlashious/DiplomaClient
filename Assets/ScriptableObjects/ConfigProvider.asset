@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: ConfigProvider
   m_EditorClassIdentifier: 
   PlayerSpeed: 10
+  PlayerJumpHeight: 2
+  Gravity: 5

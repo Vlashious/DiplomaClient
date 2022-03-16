@@ -16,9 +16,9 @@
                 },
                 {
                     "name": "Look",
-                    "type": "Value",
+                    "type": "PassThrough",
                     "id": "b3e02641-699b-40ff-b956-2555f554ed44",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -83,7 +83,7 @@
                 {
                     "name": "",
                     "id": "0823f339-367c-4973-965f-f08fcedd7aa5",
-                    "path": "<Joystick>/stick",
+                    "path": "<Gamepad>/leftStick",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -136,7 +136,7 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "modifier",
+                    "name": "Modifier",
                     "id": "190b09e5-c2a2-4d8e-991b-c1deccc6fc5c",
                     "path": "<Touchscreen>/Press",
                     "interactions": "",
@@ -147,8 +147,8 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "binding",
-                    "id": "eba88eeb-6b8f-4cbd-a3ad-8860d8b7e182",
+                    "name": "Binding",
+                    "id": "610b1a18-b32f-40ae-8be2-1c5a5419e90c",
                     "path": "<Touchscreen>/delta",
                     "interactions": "",
                     "processors": "",

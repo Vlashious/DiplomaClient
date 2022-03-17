@@ -29,6 +29,9 @@ namespace Domain.Player
             var playerEntity = _world.NewEntity();
             ref PlayerComponent playerComponent = ref _world.GetPool<PlayerComponent>().Add(playerEntity);
             playerComponent = new PlayerComponent(_player);
+            ref TransformComponent transformComponent = ref _world.GetPool<TransformComponent>().Add(playerEntity);
+            transformComponent.Transform = _player.Transform;
+            _player.gameObject.AddComponent<PackedEntity>().Entity = _world.PackEntity(playerEntity);
         }
 
         public void Run(EcsSystems systems)
@@ -57,7 +60,6 @@ namespace Domain.Player
 
             _player.Transform.rotation = Quaternion.Euler(_player.Transform.rotation.eulerAngles.x,
                 _camera.transform.rotation.eulerAngles.y, _player.Transform.rotation.eulerAngles.z);
-            Debug.Log(_player.Transform.position);
         }
     }
 }

@@ -1,5 +1,6 @@
 using Domain.Player;
 using Domain.Providers;
+using Domain.Selection;
 using Domain.Utils;
 using Domain.World;
 using UnityEngine;
@@ -29,6 +30,8 @@ namespace Domain
         private void RegisterSystems(IContainerBuilder builder)
         {
             builder.Register<PlayerSystem>(Lifetime.Singleton);
+            builder.Register<SelectionSystem>(Lifetime.Singleton);
+            builder.Register<SelectionViewSystem>(Lifetime.Singleton);
         }
     }
 }

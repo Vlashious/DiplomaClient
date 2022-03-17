@@ -1,5 +1,6 @@
 ﻿using System;
 using Domain.Player;
+using Domain.Selection;
 using Leopotam.EcsLite;
 using VContainer;
 using VContainer.Unity;
@@ -23,6 +24,8 @@ namespace Domain.World
             _ecsSystems = new EcsSystems(_ecsWorld);
 
             _ecsSystems.Add(_resolver.Resolve<PlayerSystem>())
+                       .Add(_resolver.Resolve<SelectionSystem>())
+                       .Add(_resolver.Resolve<SelectionViewSystem>())
                        .Init();
         }
 

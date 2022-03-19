@@ -14,7 +14,6 @@ namespace Domain.Selection
         private readonly UtilCanvas _utilCanvas;
 
         private GameObject _selectionView;
-        private CreatureInspectorProvider _selectionInspector;
         private EcsWorld _world;
 
         public SelectionViewSystem(PrefabProvider prefabProvider, UIProvider uiProvider, UtilCanvas utilCanvas)
@@ -29,8 +28,6 @@ namespace Domain.Selection
             _world = systems.GetWorld();
             _selectionView = Object.Instantiate(_prefabProvider.Selection);
             _selectionView.SetActive(false);
-            _selectionInspector = Object.Instantiate(_uiProvider.CreatureInspectorProvider, _utilCanvas.Canvas.transform);
-            _selectionInspector.gameObject.SetActive(false);
         }
 
         public void Run(EcsSystems systems)
@@ -50,23 +47,25 @@ namespace Domain.Selection
                 foreach (int selectedEntity in filter)
                 {
                     TransformComponent transform = _world.GetPool<TransformComponent>().Get(selectedEntity);
-                    _selectionView.transform.position = transform.Transform.position;
+                    _selectionView.transform.position = transform.Transform.position + Vector3.up * 0.01f;
                 }
             }
         }
 
         private void UpdateViewInUI()
         {
-            var filter = _world.Filter<SelectedTag>().Inc<HealthComponent>().End();
+            var filter = _world.Filter<SelectedTag>().Inc<HealthComponent>().Inc<NameComponent>().End();
             var isSelectionVisible = filter.GetEntitiesCount() > 0;
-            _selectionInspector.gameObject.SetActive(isSelectionVisible);
+            _uiProvider.CreatureInspectorProvider.gameObject.SetActive(isSelectionVisible);
 
             if (isSelectionVisible)
             {
                 foreach (int selectedEntity in filter)
                 {
                     HealthComponent healthComponent = _world.GetPool<HealthComponent>().Get(selectedEntity);
-                    _selectionInspector.SetValue(healthComponent.Health, healthComponent.MaxHealth);
+                    _uiProvider.CreatureInspectorProvider.SetValue(healthComponent.Health, healthComponent.MaxHealth);
+                    NameComponent nameComponent = _world.GetPool<NameComponent>().Get(selectedEntity);
+                    _uiProvider.CreatureInspectorProvider.Name.SetText(nameComponent.Name);
                 }
             }
         }

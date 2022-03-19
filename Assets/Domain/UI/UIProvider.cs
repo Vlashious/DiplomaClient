@@ -2,9 +2,9 @@
 
 namespace Domain.UI
 {
-    [CreateAssetMenu]
-    public sealed class UIProvider : ScriptableObject
+    public sealed class UIProvider : MonoBehaviour
     {
+        public CreatureInspectorProvider PlayerInspectorProvider;
         public CreatureInspectorProvider CreatureInspectorProvider;
     }
 }

@@ -27,8 +27,8 @@ namespace Domain
         {
             builder.RegisterComponent(_utilCamera);
             builder.RegisterComponent(_utilCanvas);
+            builder.RegisterComponent(_uiProvider);
             builder.RegisterInstance(_prefabProvider);
-            builder.RegisterInstance(_uiProvider);
             builder.RegisterInstance(_configProvider);
             RegisterSystems(builder);
             builder.UseEntryPoints(Lifetime.Singleton, pointsBuilder => { pointsBuilder.Add<MainWorld>(); });

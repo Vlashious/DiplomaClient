@@ -1,3 +1,4 @@
+using Domain.Enemy.Whale;
 using Domain.Player;
 using Domain.Providers;
 using Domain.Selection;
@@ -37,6 +38,7 @@ namespace Domain
         private void RegisterSystems(IContainerBuilder builder)
         {
             builder.Register<PlayerSystem>(Lifetime.Singleton);
+            builder.Register<WhaleSpawnSystem>(Lifetime.Singleton);
             builder.Register<SelectionSystem>(Lifetime.Singleton);
             builder.Register<SelectionViewSystem>(Lifetime.Singleton);
         }

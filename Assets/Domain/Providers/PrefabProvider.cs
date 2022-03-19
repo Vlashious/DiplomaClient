@@ -8,5 +8,6 @@ namespace Domain.Providers
     {
         public PlayerProvider Player;
         public GameObject Selection;
+        public GameObject Whale;
     }
 }

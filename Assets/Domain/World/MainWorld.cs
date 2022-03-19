@@ -1,4 +1,5 @@
 ﻿using System;
+using Domain.Enemy.Whale;
 using Domain.Player;
 using Domain.Selection;
 using Leopotam.EcsLite;
@@ -26,6 +27,7 @@ namespace Domain.World
             _ecsSystems.Add(_resolver.Resolve<PlayerSystem>())
                        .Add(_resolver.Resolve<SelectionSystem>())
                        .Add(_resolver.Resolve<SelectionViewSystem>())
+                       .Add(_resolver.Resolve<WhaleSpawnSystem>())
                        .Init();
         }
 

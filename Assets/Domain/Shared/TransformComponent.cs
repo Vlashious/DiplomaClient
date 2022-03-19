@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Domain.Utils
+namespace Domain.Shared
 {
     public struct TransformComponent
     {

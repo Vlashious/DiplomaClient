@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: edb110b2c9a6479e824d54380868427d, type: 3}
-  m_Name: ConfigProvider
+  m_Script: {fileID: 11500000, guid: 6c453ba1a4cc4680b303c4a28d75cb3f, type: 3}
+  m_Name: UIProvider
   m_EditorClassIdentifier: 
-  PlayerSpeed: 10
-  BasePlayerHealth: 100
+  CreatureInspectorProvider: {fileID: 4643526016441107210, guid: e10391f061874f24d940aae647744cc0, type: 3}

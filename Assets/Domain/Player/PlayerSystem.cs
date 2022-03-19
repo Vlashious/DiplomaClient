@@ -1,4 +1,5 @@
 ﻿using Domain.Providers;
+using Domain.Shared;
 using Domain.Utils;
 using Leopotam.EcsLite;
 using Unity.Mathematics;
@@ -32,6 +33,8 @@ namespace Domain.Player
             ref TransformComponent transformComponent = ref _world.GetPool<TransformComponent>().Add(playerEntity);
             transformComponent.Transform = _player.Transform;
             _player.gameObject.AddComponent<PackedEntity>().Entity = _world.PackEntity(playerEntity);
+            ref var playerHealth = ref _world.GetPool<HealthComponent>().Add(playerEntity);
+            playerHealth = new HealthComponent(_configProvider.BasePlayerHealth);
         }
 
         public void Run(EcsSystems systems)

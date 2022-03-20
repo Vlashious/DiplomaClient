@@ -1,7 +1,9 @@
+using Domain.Classes.Mage;
 using Domain.Enemy.Whale;
 using Domain.Player;
 using Domain.Providers;
 using Domain.Selection;
+using Domain.Shared;
 using Domain.UI;
 using Domain.Utils;
 using Domain.World;
@@ -13,6 +15,8 @@ namespace Domain
 {
     public sealed class EntryPoint : LifetimeScope
     {
+        [SerializeField]
+        private Transform[] _whaleSpawnPoints;
         [SerializeField]
         private UtilCamera _utilCamera;
         [SerializeField]
@@ -38,9 +42,11 @@ namespace Domain
         private void RegisterSystems(IContainerBuilder builder)
         {
             builder.Register<PlayerSystem>(Lifetime.Singleton);
-            builder.Register<WhaleSpawnSystem>(Lifetime.Singleton);
+            builder.Register<MageSystem>(Lifetime.Singleton);
+            builder.Register<WhaleSpawnSystem>(Lifetime.Singleton).WithParameter(_whaleSpawnPoints);
             builder.Register<SelectionSystem>(Lifetime.Singleton);
             builder.Register<SelectionViewSystem>(Lifetime.Singleton);
+            builder.Register<ProjectileMoveSystem>(Lifetime.Singleton);
         }
     }
 }

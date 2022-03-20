@@ -1,7 +1,9 @@
 ﻿using System;
+using Domain.Classes.Mage;
 using Domain.Enemy.Whale;
 using Domain.Player;
 using Domain.Selection;
+using Domain.Shared;
 using Leopotam.EcsLite;
 using VContainer;
 using VContainer.Unity;
@@ -24,11 +26,14 @@ namespace Domain.World
             _ecsWorld = new EcsWorld();
             _ecsSystems = new EcsSystems(_ecsWorld);
 
-            _ecsSystems.Add(_resolver.Resolve<PlayerSystem>())
-                       .Add(_resolver.Resolve<SelectionSystem>())
-                       .Add(_resolver.Resolve<SelectionViewSystem>())
-                       .Add(_resolver.Resolve<WhaleSpawnSystem>())
-                       .Init();
+            _ecsSystems
+               .Add(_resolver.Resolve<PlayerSystem>())
+               .Add(_resolver.Resolve<MageSystem>())
+               .Add(_resolver.Resolve<SelectionSystem>())
+               .Add(_resolver.Resolve<SelectionViewSystem>())
+               .Add(_resolver.Resolve<WhaleSpawnSystem>())
+               .Add(_resolver.Resolve<ProjectileMoveSystem>())
+               .Init();
         }
 
         public void Tick()

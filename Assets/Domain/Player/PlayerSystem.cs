@@ -1,4 +1,5 @@
-﻿using Domain.Providers;
+﻿using Domain.Classes.Mage;
+using Domain.Providers;
 using Domain.Shared;
 using Domain.UI;
 using Domain.Utils;
@@ -40,6 +41,7 @@ namespace Domain.Player
             playerHealth = new HealthComponent(_configProvider.BasePlayerHealth);
             ref var playerName = ref _world.GetPool<NameComponent>().Add(playerEntity);
             playerName = new NameComponent("Me");
+            _world.GetPool<MageTag>().Add(playerEntity);
         }
 
         public void Run(EcsSystems systems)

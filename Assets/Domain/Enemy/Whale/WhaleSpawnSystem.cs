@@ -9,24 +9,32 @@ namespace Domain.Enemy.Whale
     public class WhaleSpawnSystem : IEcsInitSystem
     {
         private readonly PrefabProvider _prefabProvider;
+        private readonly Transform[] _spawnPoints;
 
-        public WhaleSpawnSystem(PrefabProvider prefabProvider)
+        public WhaleSpawnSystem(PrefabProvider prefabProvider, Transform[] spawnPoints)
         {
             _prefabProvider = prefabProvider;
+            _spawnPoints = spawnPoints;
         }
 
         public void Init(EcsSystems systems)
         {
             var world = systems.GetWorld();
-            GameObject whale = Object.Instantiate(_prefabProvider.Whale);
-            var whaleEntity = world.NewEntity();
-            whale.AddComponent<PackedEntity>().Entity = world.PackEntity(whaleEntity);
-            ref var health = ref world.GetPool<HealthComponent>().Add(whaleEntity);
-            health = new HealthComponent(20);
-            ref var transform = ref world.GetPool<TransformComponent>().Add(whaleEntity);
-            transform.Transform = whale.transform;
-            ref var name = ref world.GetPool<NameComponent>().Add(whaleEntity);
-            name = new NameComponent("Whale");
+
+            foreach (Transform spawnPoint in _spawnPoints)
+            {
+                GameObject whale = Object.Instantiate(_prefabProvider.Whale);
+                whale.transform.position = spawnPoint.position;
+                whale.transform.rotation = spawnPoint.rotation;
+                var whaleEntity = world.NewEntity();
+                whale.AddComponent<PackedEntity>().Entity = world.PackEntity(whaleEntity);
+                ref var health = ref world.GetPool<HealthComponent>().Add(whaleEntity);
+                health = new HealthComponent(20);
+                ref var transform = ref world.GetPool<TransformComponent>().Add(whaleEntity);
+                transform.Transform = whale.transform;
+                ref var name = ref world.GetPool<NameComponent>().Add(whaleEntity);
+                name = new NameComponent("Whale");
+            }
         }
     }
 }

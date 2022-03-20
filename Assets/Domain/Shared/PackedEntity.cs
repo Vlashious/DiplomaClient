@@ -1,7 +1,7 @@
 ﻿using Leopotam.EcsLite;
 using UnityEngine;
 
-namespace Domain.Utils
+namespace Domain.Shared
 {
     public sealed class PackedEntity : MonoBehaviour
     {

@@ -6,5 +6,8 @@ namespace Domain.UI
     {
         public CreatureInspectorProvider PlayerInspectorProvider;
         public CreatureInspectorProvider CreatureInspectorProvider;
+        public AbilityButtonProvider FirstAbility;
+        public AbilityButtonProvider SecondAbility;
+        public AbilityButtonProvider SpecialAbility;
     }
 }

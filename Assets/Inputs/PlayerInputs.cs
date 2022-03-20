@@ -53,6 +53,33 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FirstAbility"",
+                    ""type"": ""Button"",
+                    ""id"": ""8594d91a-252d-40fd-9fc2-931ad9d20910"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SecondAbility"",
+                    ""type"": ""Button"",
+                    ""id"": ""3cd59b26-cba8-43d4-97d0-6492b3e0a584"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SpecialAbility"",
+                    ""type"": ""Button"",
+                    ""id"": ""73ab4579-9e86-40a0-8162-a222b72808c1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -253,6 +280,39 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""action"": ""Select"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ba5f1a4a-6ef0-4111-abc8-b89fa765978c"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FirstAbility"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d5564016-af76-4651-a797-9085d33915d8"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SecondAbility"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""38f83b99-5126-48e3-9f67-a91b17d2fa08"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SpecialAbility"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -264,6 +324,9 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Select = m_Player.FindAction("Select", throwIfNotFound: true);
+        m_Player_FirstAbility = m_Player.FindAction("FirstAbility", throwIfNotFound: true);
+        m_Player_SecondAbility = m_Player.FindAction("SecondAbility", throwIfNotFound: true);
+        m_Player_SpecialAbility = m_Player.FindAction("SpecialAbility", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -326,6 +389,9 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Select;
+    private readonly InputAction m_Player_FirstAbility;
+    private readonly InputAction m_Player_SecondAbility;
+    private readonly InputAction m_Player_SpecialAbility;
     public struct PlayerActions
     {
         private @PlayerInputs m_Wrapper;
@@ -333,6 +399,9 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Select => m_Wrapper.m_Player_Select;
+        public InputAction @FirstAbility => m_Wrapper.m_Player_FirstAbility;
+        public InputAction @SecondAbility => m_Wrapper.m_Player_SecondAbility;
+        public InputAction @SpecialAbility => m_Wrapper.m_Player_SpecialAbility;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -351,6 +420,15 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @Select.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSelect;
                 @Select.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSelect;
                 @Select.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSelect;
+                @FirstAbility.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFirstAbility;
+                @FirstAbility.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFirstAbility;
+                @FirstAbility.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFirstAbility;
+                @SecondAbility.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSecondAbility;
+                @SecondAbility.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSecondAbility;
+                @SecondAbility.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSecondAbility;
+                @SpecialAbility.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecialAbility;
+                @SpecialAbility.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecialAbility;
+                @SpecialAbility.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecialAbility;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -364,6 +442,15 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @Select.started += instance.OnSelect;
                 @Select.performed += instance.OnSelect;
                 @Select.canceled += instance.OnSelect;
+                @FirstAbility.started += instance.OnFirstAbility;
+                @FirstAbility.performed += instance.OnFirstAbility;
+                @FirstAbility.canceled += instance.OnFirstAbility;
+                @SecondAbility.started += instance.OnSecondAbility;
+                @SecondAbility.performed += instance.OnSecondAbility;
+                @SecondAbility.canceled += instance.OnSecondAbility;
+                @SpecialAbility.started += instance.OnSpecialAbility;
+                @SpecialAbility.performed += instance.OnSpecialAbility;
+                @SpecialAbility.canceled += instance.OnSpecialAbility;
             }
         }
     }
@@ -373,5 +460,8 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnSelect(InputAction.CallbackContext context);
+        void OnFirstAbility(InputAction.CallbackContext context);
+        void OnSecondAbility(InputAction.CallbackContext context);
+        void OnSpecialAbility(InputAction.CallbackContext context);
     }
 }

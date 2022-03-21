@@ -66,9 +66,10 @@ namespace Domain.Classes.Mage
                 var fireball = _world.NewEntity();
                 var go = Object.Instantiate(_prefabProvider.Fireball, _player.Transform.position, Quaternion.identity);
                 _world.GetPool<TransformComponent>().Add(fireball).Transform = go.transform;
-                ref var projectile = ref _world.GetPool<ProjectileTargetTag>().Add(fireball);
+                ref var projectile = ref _world.GetPool<DamageProjectile>().Add(fireball);
                 projectile.Speed = 50;
-                projectile.Transform = target.Transform;
+                projectile.Target = target.Transform;
+                projectile.Damage = 10;
             }
         }
     }

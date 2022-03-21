@@ -1,4 +1,4 @@
-﻿namespace Domain.Shared
+﻿namespace Domain.Damage
 {
     public struct DealDamageComponent
     {

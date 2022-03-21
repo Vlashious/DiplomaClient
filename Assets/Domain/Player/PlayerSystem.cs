@@ -1,4 +1,5 @@
 ﻿using Domain.Classes.Mage;
+using Domain.Health;
 using Domain.Providers;
 using Domain.Shared;
 using Domain.UI;

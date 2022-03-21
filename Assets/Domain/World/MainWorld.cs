@@ -1,6 +1,8 @@
 ﻿using System;
 using Domain.Classes.Mage;
+using Domain.Damage;
 using Domain.Enemy.Whale;
+using Domain.Health;
 using Domain.Player;
 using Domain.Selection;
 using Domain.Shared;
@@ -33,6 +35,8 @@ namespace Domain.World
                .Add(_resolver.Resolve<SelectionViewSystem>())
                .Add(_resolver.Resolve<WhaleSpawnSystem>())
                .Add(_resolver.Resolve<ProjectileMoveSystem>())
+               .Add(_resolver.Resolve<DealDamageSystem>())
+               .Add(_resolver.Resolve<HealthSystem>())
                .Init();
         }
 

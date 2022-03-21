@@ -1,5 +1,7 @@
 using Domain.Classes.Mage;
+using Domain.Damage;
 using Domain.Enemy.Whale;
+using Domain.Health;
 using Domain.Player;
 using Domain.Providers;
 using Domain.Selection;
@@ -47,6 +49,8 @@ namespace Domain
             builder.Register<SelectionSystem>(Lifetime.Singleton);
             builder.Register<SelectionViewSystem>(Lifetime.Singleton);
             builder.Register<ProjectileMoveSystem>(Lifetime.Singleton);
+            builder.Register<DealDamageSystem>(Lifetime.Singleton);
+            builder.Register<HealthSystem>(Lifetime.Singleton);
         }
     }
 }

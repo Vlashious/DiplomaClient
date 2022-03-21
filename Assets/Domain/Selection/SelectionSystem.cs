@@ -3,6 +3,7 @@ using Domain.Shared;
 using Domain.Utils;
 using Leopotam.EcsLite;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Domain.Selection
 {
@@ -25,7 +26,8 @@ namespace Domain.Selection
             {
                 ref var playerComponent = ref world.GetPool<PlayerComponent>().Get(player);
 
-                if (playerComponent.Player.PlayerInput.Player.Select.WasPressedThisFrame())
+                if (!EventSystem.current.IsPointerOverGameObject() &&
+                    playerComponent.Player.PlayerInput.Player.Select.WasPressedThisFrame())
                 {
                     foreach (int selectedEntity in world.Filter<SelectedTag>().End())
                     {

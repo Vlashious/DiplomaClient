@@ -51,8 +51,8 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""id"": ""18011d62-2b8f-4450-b0a5-13e068b165dc"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""interactions"": ""Tap"",
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""FirstAbility"",
@@ -80,6 +80,15 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Zoom"",
+                    ""type"": ""Value"",
+                    ""id"": ""25151a66-a328-463d-9cef-27679ef96b0f"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -216,72 +225,6 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""ClickPC"",
-                    ""id"": ""cc82eb07-111b-43bd-b54f-ad2805fa13c0"",
-                    ""path"": ""OneModifier"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Select"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier"",
-                    ""id"": ""7f84645d-ae53-44e1-a003-5f4108adc58a"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Select"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""binding"",
-                    ""id"": ""017d4990-8a48-4bcc-b24b-4643e4947c9c"",
-                    ""path"": ""<Mouse>/position"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Select"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""ClickPhone"",
-                    ""id"": ""b8f26261-45f8-4cf5-a3c2-c3ee93423687"",
-                    ""path"": ""OneModifier"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Select"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier"",
-                    ""id"": ""c4bd5aa7-c1b0-46f1-85aa-3dcad2178f77"",
-                    ""path"": ""<Touchscreen>/Press"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Select"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""binding"",
-                    ""id"": ""6eb688f4-8342-4565-acf7-75b2c552ecca"",
-                    ""path"": ""<Touchscreen>/position"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Select"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": """",
                     ""id"": ""ba5f1a4a-6ef0-4111-abc8-b89fa765978c"",
                     ""path"": ""<Keyboard>/1"",
@@ -313,6 +256,83 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""action"": ""SpecialAbility"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1c2acf46-9173-4cca-af76-b37fd04357a3"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""PC"",
+                    ""id"": ""7c391c84-a1bb-455e-a870-d5bcb407552e"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""3138fe75-539e-45cd-baa7-aef8e40e2818"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""3bb2fd4e-2469-4478-a6f1-75a441a47b98"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Touch"",
+                    ""id"": ""6986a5e3-ddd4-4e24-952e-783901113a0c"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""aaf15682-6012-4456-8e02-68b66ab15473"",
+                    ""path"": ""<Touchscreen>/primaryTouch/tap"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""d04eb978-7abc-4136-b46f-8f44f060775d"",
+                    ""path"": ""<Touchscreen>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -327,6 +347,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         m_Player_FirstAbility = m_Player.FindAction("FirstAbility", throwIfNotFound: true);
         m_Player_SecondAbility = m_Player.FindAction("SecondAbility", throwIfNotFound: true);
         m_Player_SpecialAbility = m_Player.FindAction("SpecialAbility", throwIfNotFound: true);
+        m_Player_Zoom = m_Player.FindAction("Zoom", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -392,6 +413,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_FirstAbility;
     private readonly InputAction m_Player_SecondAbility;
     private readonly InputAction m_Player_SpecialAbility;
+    private readonly InputAction m_Player_Zoom;
     public struct PlayerActions
     {
         private @PlayerInputs m_Wrapper;
@@ -402,6 +424,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         public InputAction @FirstAbility => m_Wrapper.m_Player_FirstAbility;
         public InputAction @SecondAbility => m_Wrapper.m_Player_SecondAbility;
         public InputAction @SpecialAbility => m_Wrapper.m_Player_SpecialAbility;
+        public InputAction @Zoom => m_Wrapper.m_Player_Zoom;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -429,6 +452,9 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @SpecialAbility.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecialAbility;
                 @SpecialAbility.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecialAbility;
                 @SpecialAbility.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpecialAbility;
+                @Zoom.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoom;
+                @Zoom.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoom;
+                @Zoom.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoom;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -451,6 +477,9 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @SpecialAbility.started += instance.OnSpecialAbility;
                 @SpecialAbility.performed += instance.OnSpecialAbility;
                 @SpecialAbility.canceled += instance.OnSpecialAbility;
+                @Zoom.started += instance.OnZoom;
+                @Zoom.performed += instance.OnZoom;
+                @Zoom.canceled += instance.OnZoom;
             }
         }
     }
@@ -463,5 +492,6 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         void OnFirstAbility(InputAction.CallbackContext context);
         void OnSecondAbility(InputAction.CallbackContext context);
         void OnSpecialAbility(InputAction.CallbackContext context);
+        void OnZoom(InputAction.CallbackContext context);
     }
 }

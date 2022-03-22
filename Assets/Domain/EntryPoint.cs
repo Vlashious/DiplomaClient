@@ -45,6 +45,7 @@ namespace Domain
         {
             builder.Register<PlayerSystem>(Lifetime.Singleton);
             builder.Register<MageSystem>(Lifetime.Singleton);
+            builder.Register<MageBombSystem>(Lifetime.Singleton);
             builder.Register<WhaleSpawnSystem>(Lifetime.Singleton).WithParameter(_whaleSpawnPoints);
             builder.Register<SelectionSystem>(Lifetime.Singleton);
             builder.Register<SelectionViewSystem>(Lifetime.Singleton);

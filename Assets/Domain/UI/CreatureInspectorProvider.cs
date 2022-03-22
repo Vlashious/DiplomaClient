@@ -9,6 +9,8 @@ namespace Domain.UI
         public TMP_Text Name;
         public Slider HealthBar;
         public TMP_Text HealthBarValue;
+        public Transform EffectsRoot;
+        public UIEffectProvider UIEffectProviderPrefab;
 
         public void SetValue(float currentValue, float maxValue)
         {

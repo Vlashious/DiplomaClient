@@ -293,7 +293,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 {
                     ""name"": ""binding"",
                     ""id"": ""3bb2fd4e-2469-4478-a6f1-75a441a47b98"",
-                    ""path"": ""<Mouse>/position"",
+                    ""path"": ""<Pointer>/position"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -326,7 +326,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 {
                     ""name"": ""binding"",
                     ""id"": ""d04eb978-7abc-4136-b46f-8f44f060775d"",
-                    ""path"": ""<Touchscreen>/position"",
+                    ""path"": ""<Pointer>/position"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

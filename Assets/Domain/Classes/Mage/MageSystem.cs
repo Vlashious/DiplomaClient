@@ -48,7 +48,7 @@ namespace Domain.Classes.Mage
 
                 if (_inputSystem.Player.SecondAbility.WasPressedThisFrame())
                 {
-                    Debug.Log("Mage second ability");
+                    SpawnSecondAbility();
                 }
 
                 if (_inputSystem.Player.SpecialAbility.WasPressedThisFrame())
@@ -70,6 +70,22 @@ namespace Domain.Classes.Mage
                 projectile.Speed = 50;
                 projectile.Target = target.Transform;
                 projectile.Damage = 10;
+            }
+        }
+
+        private void SpawnSecondAbility()
+        {
+            foreach (int entity in _world.Filter<TransformComponent>().Inc<SelectedTag>().End())
+            {
+                var bombPool = _world.GetPool<MageBomb>();
+
+                if (bombPool.Has(entity)) { }
+                else
+                {
+                    ref var bomb = ref _world.GetPool<MageBomb>().Add(entity);
+                    bomb.Duration = bomb.MaxDuration = 5;
+                    bomb.Damage = 100;
+                }
             }
         }
     }

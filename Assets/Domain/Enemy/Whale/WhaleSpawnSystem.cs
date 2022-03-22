@@ -30,7 +30,7 @@ namespace Domain.Enemy.Whale
                 var whaleEntity = world.NewEntity();
                 whale.AddComponent<PackedEntity>().Entity = world.PackEntity(whaleEntity);
                 ref var health = ref world.GetPool<HealthComponent>().Add(whaleEntity);
-                health = new HealthComponent(20);
+                health = new HealthComponent(200);
                 ref var transform = ref world.GetPool<TransformComponent>().Add(whaleEntity);
                 transform.Transform = whale.transform;
                 ref var name = ref world.GetPool<NameComponent>().Add(whaleEntity);

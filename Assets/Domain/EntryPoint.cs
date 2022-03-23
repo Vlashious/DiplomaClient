@@ -2,6 +2,7 @@ using Domain.Classes.Mage;
 using Domain.Damage;
 using Domain.Enemy.Whale;
 using Domain.Health;
+using Domain.Network;
 using Domain.Player;
 using Domain.Providers;
 using Domain.Selection;
@@ -32,6 +33,7 @@ namespace Domain
 
         protected override void Configure(IContainerBuilder builder)
         {
+            Application.targetFrameRate = 60;
             builder.RegisterComponent(_utilCamera);
             builder.RegisterComponent(_utilCanvas);
             builder.RegisterComponent(_uiProvider);
@@ -52,6 +54,8 @@ namespace Domain
             builder.Register<ProjectileMoveSystem>(Lifetime.Singleton);
             builder.Register<DealDamageSystem>(Lifetime.Singleton);
             builder.Register<HealthSystem>(Lifetime.Singleton);
+            builder.Register<CreatureInspectorSystem>(Lifetime.Singleton);
+            builder.Register<NetworkingSystem>(Lifetime.Singleton);
         }
     }
 }

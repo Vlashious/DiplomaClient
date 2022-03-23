@@ -1,4 +1,5 @@
-﻿using Domain.Player;
+﻿using Domain.Enemy.Whale;
+using Domain.Player;
 using UnityEngine;
 
 namespace Domain.Providers
@@ -7,8 +8,9 @@ namespace Domain.Providers
     public sealed class PrefabProvider : ScriptableObject
     {
         public PlayerProvider Player;
+        public PlayerProvider NetworkPlayer;
         public GameObject Selection;
-        public GameObject Whale;
+        public WhaleProvider Whale;
         public GameObject Fireball;
     }
 }

@@ -34,7 +34,6 @@ namespace Domain.Selection
         public void Run(EcsSystems systems)
         {
             UpdateViewInWorld();
-            UpdateViewInUI();
         }
 
         private void UpdateViewInWorld()
@@ -49,24 +48,6 @@ namespace Domain.Selection
                 {
                     TransformComponent transform = _world.GetPool<TransformComponent>().Get(selectedEntity);
                     _selectionView.transform.position = transform.Transform.position + Vector3.up * 0.01f;
-                }
-            }
-        }
-
-        private void UpdateViewInUI()
-        {
-            var filter = _world.Filter<SelectedTag>().Inc<HealthComponent>().Inc<NameComponent>().End();
-            var isSelectionVisible = filter.GetEntitiesCount() > 0;
-            _uiProvider.CreatureInspectorProvider.gameObject.SetActive(isSelectionVisible);
-
-            if (isSelectionVisible)
-            {
-                foreach (int selectedEntity in filter)
-                {
-                    HealthComponent healthComponent = _world.GetPool<HealthComponent>().Get(selectedEntity);
-                    _uiProvider.CreatureInspectorProvider.SetValue(healthComponent.Health, healthComponent.MaxHealth);
-                    NameComponent nameComponent = _world.GetPool<NameComponent>().Get(selectedEntity);
-                    _uiProvider.CreatureInspectorProvider.Name.SetText(nameComponent.Name);
                 }
             }
         }

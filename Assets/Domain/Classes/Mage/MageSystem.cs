@@ -53,7 +53,7 @@ namespace Domain.Classes.Mage
 
                 if (_inputSystem.Player.SpecialAbility.WasPressedThisFrame())
                 {
-                    Debug.Log("Mage spceial ability");
+                    SpawnSpecialAbility();
                 }
             }
         }
@@ -67,9 +67,9 @@ namespace Domain.Classes.Mage
                 var go = Object.Instantiate(_prefabProvider.Fireball, _player.Transform.position, Quaternion.identity);
                 _world.GetPool<TransformComponent>().Add(fireball).Transform = go.transform;
                 ref var projectile = ref _world.GetPool<DamageProjectile>().Add(fireball);
-                projectile.Speed = 50;
+                projectile.Speed = 20;
                 projectile.Target = target.Transform;
-                projectile.Damage = 10;
+                projectile.Damage = 20;
             }
         }
 
@@ -87,6 +87,11 @@ namespace Domain.Classes.Mage
                     bomb.Damage = 100;
                 }
             }
+        }
+
+        private void SpawnSpecialAbility()
+        {
+            
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Domain.Classes.Mage;
 using Domain.Health;
+using Domain.Network;
 using Domain.Providers;
 using Domain.Shared;
 using Domain.UI;
@@ -43,6 +44,7 @@ namespace Domain.Player
             ref var playerName = ref _world.GetPool<NameComponent>().Add(playerEntity);
             playerName = new NameComponent("Me");
             _world.GetPool<MageTag>().Add(playerEntity);
+            _world.GetPool<Synchronize>().Add(playerEntity);
         }
 
         public void Run(EcsSystems systems)

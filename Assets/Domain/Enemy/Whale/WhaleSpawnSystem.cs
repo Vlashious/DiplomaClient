@@ -24,17 +24,19 @@ namespace Domain.Enemy.Whale
 
             foreach (Transform spawnPoint in _spawnPoints)
             {
-                GameObject whale = Object.Instantiate(_prefabProvider.Whale);
+                WhaleProvider whale = Object.Instantiate(_prefabProvider.Whale);
                 whale.transform.position = spawnPoint.position;
                 whale.transform.rotation = spawnPoint.rotation;
                 var whaleEntity = world.NewEntity();
-                whale.AddComponent<PackedEntity>().Entity = world.PackEntity(whaleEntity);
+                whale.gameObject.AddComponent<PackedEntity>().Entity = world.PackEntity(whaleEntity);
                 ref var health = ref world.GetPool<HealthComponent>().Add(whaleEntity);
                 health = new HealthComponent(200);
                 ref var transform = ref world.GetPool<TransformComponent>().Add(whaleEntity);
                 transform.Transform = whale.transform;
                 ref var name = ref world.GetPool<NameComponent>().Add(whaleEntity);
                 name = new NameComponent("Whale");
+                ref var inspector = ref world.GetPool<CreatureInspector>().Add(whaleEntity);
+                inspector.CreatureInspectorProvider = whale.CreatureInspectorProvider;
             }
         }
     }

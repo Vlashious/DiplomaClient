@@ -1,7 +1,9 @@
-﻿namespace Domain.Network
+﻿using System;
+
+namespace Domain.Network
 {
     public struct NetworkPlayer
     {
-        public string Id;
+        public Guid Id;
     }
 }

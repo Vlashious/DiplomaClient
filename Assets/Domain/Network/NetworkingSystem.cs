@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net.Http;
 using Cysharp.Threading.Tasks;
 using Domain.Providers;
 using Domain.Shared;
@@ -15,7 +14,7 @@ namespace Domain.Network
     {
         private readonly PrefabProvider _prefabProvider;
         private HubConnection _connection;
-        private Guid _guid = Guid.NewGuid();
+        private readonly Guid _guid = Guid.NewGuid();
         private EcsWorld _world;
 
         public NetworkingSystem(PrefabProvider prefabProvider)
@@ -28,25 +27,18 @@ namespace Domain.Network
             _world = systems.GetWorld();
 
             _connection = new HubConnectionBuilder()
-                         .WithUrl("http://localhost:5176/transformHub", options =>
-                          {
-                              options.HttpMessageHandlerFactory = (msg) =>
-                              {
-                                  if (msg is HttpClientHandler handler)
-                                  {
-                                      handler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
-                                  }
-
-                                  return msg;
-                              };
-                          })
+                         .WithUrl("http://localhost:5176/transformHub")
                          .Build();
 
-            _connection.On<string, byte[]>("SendTransformUpdate", OnTransformUpdateReceived);
-            _connection.On<string>("OnPlayerConnected", OnPlayerConnected);
+            _connection.On<Guid[]>("RetreiveAllPlayers", OnAllPlayersRetreived);
+            _connection.On<Guid, byte[]>("SendTransformUpdate", OnTransformUpdateReceived);
+            _connection.On<Guid>("OnPlayerConnected", OnPlayerConnected);
+            _connection.On<Guid>("OnPlayerDisconnected", OnPlayerDisconnected);
 
             await _connection.StartAsync();
-            await _connection.SendAsync("OnPlayerConnected", _guid.ToString());
+            await _connection.SendAsync("RetreiveAllPlayers");
+
+            await _connection.SendAsync("OnPlayerConnected", _guid);
             UniTask.RunOnThreadPool(Synchronize).Forget();
             Debug.Log("Connected to transform hub!");
         }
@@ -55,25 +47,19 @@ namespace Domain.Network
         {
             while (true)
             {
-                await UniTask.Delay(TimeSpan.FromMilliseconds(30));
+                await UniTask.Delay(TimeSpan.FromMilliseconds(50));
 
                 foreach (var entity in _world.Filter<TransformComponent>().Inc<Synchronize>().End())
                 {
                     var transform = _world.GetPool<TransformComponent>().Get(entity);
-                    var position = transform.Transform.position;
-                    transform.X = position.x;
-                    transform.Y = position.y;
-                    transform.Z = position.z;
                     var data = transform.Serialize();
-                    await _connection.SendAsync("SendTransformUpdate", _guid.ToString(), data);
+                    await _connection.SendAsync("SendTransformUpdate", _guid, data);
                 }
             }
         }
 
-        private void OnTransformUpdateReceived(string userId, byte[] data)
+        private void OnTransformUpdateReceived(Guid userId, byte[] data)
         {
-            Debug.Log($"{userId}: {TransformComponent.Deserialize(data)}");
-
             foreach (int entity in _world.Filter<NetworkPlayer>().Inc<TransformComponent>().End())
             {
                 ref var transform = ref _world.GetPool<TransformComponent>().Get(entity);
@@ -81,13 +67,22 @@ namespace Domain.Network
 
                 if (player.Id == userId)
                 {
-                    var deserialized = TransformComponent.Deserialize(data);
-                    transform.Transform.position = new float3(deserialized.X, deserialized.Y, deserialized.Z);
+                    (float3 pos, float3 rot) = TransformComponent.Deserialize(data);
+                    transform.Transform.position = pos;
+                    transform.Transform.rotation = Quaternion.Euler(rot.xyz);
                 }
             }
         }
 
-        private void OnPlayerConnected(string userId)
+        private void OnAllPlayersRetreived(Guid[] allPlayers)
+        {
+            foreach (Guid player in allPlayers)
+            {
+                OnPlayerConnected(player);
+            }
+        }
+
+        private void OnPlayerConnected(Guid userId)
         {
             var networkPlayer = Object.Instantiate(_prefabProvider.NetworkPlayer);
             var playerEntity = _world.NewEntity();
@@ -95,6 +90,21 @@ namespace Domain.Network
             player.Id = userId;
             ref var transform = ref _world.GetPool<TransformComponent>().Add(playerEntity);
             transform.Transform = networkPlayer.Transform;
+        }
+
+        private void OnPlayerDisconnected(Guid userId)
+        {
+            foreach (int entity in _world.Filter<NetworkPlayer>().Inc<TransformComponent>().End())
+            {
+                ref var transform = ref _world.GetPool<TransformComponent>().Get(entity);
+                ref var player = ref _world.GetPool<NetworkPlayer>().Get(entity);
+
+                if (player.Id == userId)
+                {
+                    Object.Destroy(transform.Transform.gameObject);
+                    _world.DelEntity(entity);
+                }
+            }
         }
 
         public async void Dispose()

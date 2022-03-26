@@ -1,20 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Domain.Network.Commands;
+using Domain.Player;
 using Domain.Providers;
 using Domain.Shared;
 using Leopotam.EcsLite;
 using Microsoft.AspNetCore.SignalR.Client;
-using Unity.Mathematics;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Domain.Network
 {
-    public class NetworkingSystem : IEcsInitSystem, IDisposable
+    public class NetworkingSystem : IEcsInitSystem, IEcsRunSystem, IEcsDestroySystem
     {
+        private readonly Guid _thisId = Guid.NewGuid();
+        private readonly Queue<INetworkCommand> _commands = new();
+
         private readonly PrefabProvider _prefabProvider;
         private HubConnection _connection;
-        private readonly Guid _guid = Guid.NewGuid();
         private EcsWorld _world;
 
         public NetworkingSystem(PrefabProvider prefabProvider)
@@ -27,77 +31,54 @@ namespace Domain.Network
             _world = systems.GetWorld();
 
             _connection = new HubConnectionBuilder()
-                         .WithUrl("http://localhost:5176/transformHub")
+                         .WithUrl("http://localhost:5176/worldHub")
                          .Build();
 
-            _connection.On<Guid[]>("RetreiveAllPlayers", OnAllPlayersRetreived);
             _connection.On<Guid, byte[]>("SendTransformUpdate", OnTransformUpdateReceived);
-            _connection.On<Guid>("OnPlayerConnected", OnPlayerConnected);
+            _connection.On<Guid>("OtherPlayerConnect", OnOtherPlayerConnected);
+            _connection.On<Guid, Guid[]>("ThisPlayerConnect", OnThisPlayerConnected);
             _connection.On<Guid>("OnPlayerDisconnected", OnPlayerDisconnected);
 
             await _connection.StartAsync();
-            await _connection.SendAsync("RetreiveAllPlayers");
 
-            await _connection.SendAsync("OnPlayerConnected", _guid);
-            UniTask.RunOnThreadPool(Synchronize).Forget();
-            Debug.Log("Connected to transform hub!");
-        }
-
-        private async UniTask Synchronize()
-        {
-            while (true)
-            {
-                await UniTask.Delay(TimeSpan.FromMilliseconds(50));
-
-                foreach (var entity in _world.Filter<TransformComponent>().Inc<Synchronize>().End())
-                {
-                    var transform = _world.GetPool<TransformComponent>().Get(entity);
-                    var data = transform.Serialize();
-                    await _connection.SendAsync("SendTransformUpdate", _guid, data);
-                }
-            }
+            await _connection.SendAsync("ThisPlayerConnect", _thisId, Array.Empty<Guid>());
+            Debug.Log("Connected as player!");
         }
 
         private void OnTransformUpdateReceived(Guid userId, byte[] data)
         {
-            foreach (int entity in _world.Filter<NetworkPlayer>().Inc<TransformComponent>().End())
+            if (userId != _thisId)
             {
-                ref var transform = ref _world.GetPool<TransformComponent>().Get(entity);
-                ref var player = ref _world.GetPool<NetworkPlayer>().Get(entity);
-
-                if (player.Id == userId)
-                {
-                    (float3 pos, float3 rot) = TransformComponent.Deserialize(data);
-                    transform.Transform.position = pos;
-                    transform.Transform.rotation = Quaternion.Euler(rot.xyz);
-                }
+                _commands.Enqueue(new UpdatePositionCommand(_world, userId, data));
             }
         }
 
-        private void OnAllPlayersRetreived(Guid[] allPlayers)
-        {
-            foreach (Guid player in allPlayers)
-            {
-                OnPlayerConnected(player);
-            }
-        }
-
-        private void OnPlayerConnected(Guid userId)
+        private void OnOtherPlayerConnected(Guid userId)
         {
             var networkPlayer = Object.Instantiate(_prefabProvider.NetworkPlayer);
             var playerEntity = _world.NewEntity();
-            ref var player = ref _world.GetPool<NetworkPlayer>().Add(playerEntity);
+            ref var player = ref _world.GetPool<Synchronize>().Add(playerEntity);
             player.Id = userId;
             ref var transform = ref _world.GetPool<TransformComponent>().Add(playerEntity);
             transform.Transform = networkPlayer.Transform;
         }
 
+        private void OnThisPlayerConnected(Guid userId, Guid[] otherPlayers)
+        {
+            _commands.Enqueue(new SpawnMainPlayerCommand(_world, userId));
+
+            foreach (Guid otherPlayer in otherPlayers)
+            {
+                OnOtherPlayerConnected(otherPlayer);
+            }
+        }
+
         private void OnPlayerDisconnected(Guid userId)
         {
-            foreach (int entity in _world.Filter<NetworkPlayer>().Inc<TransformComponent>().End())
+            foreach (int entity in _world.Filter<Synchronize>().Inc<TransformComponent>().End())
             {
                 ref var transform = ref _world.GetPool<TransformComponent>().Get(entity);
-                ref var player = ref _world.GetPool<NetworkPlayer>().Get(entity);
+                ref var player = ref _world.GetPool<Synchronize>().Get(entity);
 
                 if (player.Id == userId)
                 {
@@ -107,7 +88,23 @@ namespace Domain.Network
             }
         }
 
-        public async void Dispose()
+        public async void Run(EcsSystems systems)
+        {
+            while (_commands.TryDequeue(out var command))
+            {
+                command.Do();
+            }
+
+            foreach (int syncEntity in _world.Filter<TransformComponent>().Inc<Synchronize>().Inc<PlayerComponent>().End())
+            {
+                var trasnform = _world.GetPool<TransformComponent>().Get(syncEntity);
+                var id = _world.GetPool<Synchronize>().Get(syncEntity);
+
+                await _connection.SendAsync("SendTransformUpdate", id.Id, trasnform.Serialize());
+            }
+        }
+
+        public async void Destroy(EcsSystems systems)
         {
             await _connection.DisposeAsync();
         }

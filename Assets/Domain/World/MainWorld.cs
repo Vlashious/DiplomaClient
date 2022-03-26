@@ -32,6 +32,7 @@ namespace Domain.World
 
             _ecsSystems
                .Add(_resolver.Resolve<PlayerSystem>())
+               .Add(_resolver.Resolve<PlayerSpawnSystem>())
                .Add(_resolver.Resolve<MageSystem>())
                .Add(_resolver.Resolve<MageBombSystem>())
                .Add(_resolver.Resolve<SelectionSystem>())

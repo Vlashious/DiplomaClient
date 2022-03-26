@@ -1,8 +1,5 @@
-﻿using Domain.Classes.Mage;
-using Domain.Health;
-using Domain.Network;
+﻿using Domain.Health;
 using Domain.Providers;
-using Domain.Shared;
 using Domain.UI;
 using Domain.Utils;
 using Leopotam.EcsLite;
@@ -11,55 +8,38 @@ using UnityEngine;
 
 namespace Domain.Player
 {
-    public sealed class PlayerSystem : IEcsInitSystem, IEcsRunSystem
+    public sealed class PlayerSystem : IEcsRunSystem
     {
-        private readonly PrefabProvider _prefabProvider;
         private readonly ConfigProvider _configProvider;
         private readonly UtilCamera _camera;
         private readonly UIProvider _uiProvider;
 
-        private EcsWorld _world;
-        private PlayerProvider _player;
-
-        public PlayerSystem(PrefabProvider prefabProvider, ConfigProvider configProvider, UtilCamera camera, UIProvider uiProvider)
+        public PlayerSystem(ConfigProvider configProvider, UtilCamera camera, UIProvider uiProvider)
         {
-            _prefabProvider = prefabProvider;
             _configProvider = configProvider;
             _camera = camera;
             _uiProvider = uiProvider;
         }
 
-        public void Init(EcsSystems systems)
-        {
-            _player = Object.Instantiate(_prefabProvider.Player);
-            _world = systems.GetWorld();
-            var playerEntity = _world.NewEntity();
-            ref PlayerComponent playerComponent = ref _world.GetPool<PlayerComponent>().Add(playerEntity);
-            playerComponent = new PlayerComponent(_player);
-            ref TransformComponent transformComponent = ref _world.GetPool<TransformComponent>().Add(playerEntity);
-            transformComponent.Transform = _player.Transform;
-            _player.gameObject.AddComponent<PackedEntity>().Entity = _world.PackEntity(playerEntity);
-            ref var playerHealth = ref _world.GetPool<HealthComponent>().Add(playerEntity);
-            playerHealth = new HealthComponent(_configProvider.BasePlayerHealth);
-            ref var playerName = ref _world.GetPool<NameComponent>().Add(playerEntity);
-            playerName = new NameComponent("Me");
-            _world.GetPool<MageTag>().Add(playerEntity);
-            _world.GetPool<Synchronize>().Add(playerEntity);
-        }
-
         public void Run(EcsSystems systems)
         {
-            CheckMove();
-            UpdatePlayerInspector();
+            var world = systems.GetWorld();
+
+            foreach (int player in world.Filter<PlayerComponent>().End())
+            {
+                var playerProvider = world.GetPool<PlayerComponent>().Get(player);
+                CheckMove(playerProvider.Player);
+                UpdatePlayerInspector(world);
+            }
         }
 
-        private void CheckMove()
+        private void CheckMove(PlayerProvider player)
         {
-            Vector2 movementInput = _player.PlayerInput.Player.Move.ReadValue<Vector2>();
+            Vector2 movementInput = player.PlayerInput.Player.Move.ReadValue<Vector2>();
 
             bool isMoving = math.lengthsq(movementInput) > 0.1f;
 
-            _player.Animator.SetBool("IsMoving", isMoving);
+            player.Animator.SetBool("IsMoving", isMoving);
 
             if (!isMoving)
             {
@@ -70,19 +50,19 @@ namespace Domain.Player
             moveDirection.y = 0f;
 
             moveDirection = math.normalizesafe(moveDirection);
-            _player.CharacterController.Move(moveDirection * _configProvider.PlayerSpeed * Time.deltaTime);
+            player.CharacterController.Move(moveDirection * _configProvider.PlayerSpeed * Time.deltaTime);
 
-            _player.Transform.rotation = Quaternion.Euler(_player.Transform.rotation.eulerAngles.x,
-                _camera.transform.rotation.eulerAngles.y, _player.Transform.rotation.eulerAngles.z);
+            player.Transform.rotation = Quaternion.Euler(player.Transform.rotation.eulerAngles.x,
+                _camera.transform.rotation.eulerAngles.y, player.Transform.rotation.eulerAngles.z);
         }
 
-        private void UpdatePlayerInspector()
+        private void UpdatePlayerInspector(EcsWorld world)
         {
             _uiProvider.PlayerInspectorProvider.Name.SetText("Player");
 
-            foreach (int player in _world.Filter<PlayerComponent>().Inc<HealthComponent>().End())
+            foreach (int player in world.Filter<PlayerComponent>().Inc<HealthComponent>().End())
             {
-                var health = _world.GetPool<HealthComponent>().Get(player);
+                var health = world.GetPool<HealthComponent>().Get(player);
                 _uiProvider.PlayerInspectorProvider.SetValue(health.Health, health.MaxHealth);
             }
         }

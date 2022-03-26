@@ -46,6 +46,7 @@ namespace Domain
         private void RegisterSystems(IContainerBuilder builder)
         {
             builder.Register<PlayerSystem>(Lifetime.Singleton);
+            builder.Register<PlayerSpawnSystem>(Lifetime.Singleton);
             builder.Register<MageSystem>(Lifetime.Singleton);
             builder.Register<MageBombSystem>(Lifetime.Singleton);
             builder.Register<WhaleSpawnSystem>(Lifetime.Singleton).WithParameter(_whaleSpawnPoints);

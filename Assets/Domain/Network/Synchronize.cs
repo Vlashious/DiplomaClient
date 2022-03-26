@@ -1,4 +1,9 @@
-﻿namespace Domain.Network
+﻿using System;
+
+namespace Domain.Network
 {
-    public struct Synchronize { }
+    public struct Synchronize
+    {
+        public Guid Id;
+    }
 }

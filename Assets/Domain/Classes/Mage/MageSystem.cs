@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Domain.Classes.Mage
 {
-    public class MageSystem : IEcsInitSystem, IEcsRunSystem
+    public class MageSystem : IEcsRunSystem
     {
         private readonly UIProvider _uiProvider;
         private readonly PrefabProvider _prefabProvider;
@@ -22,7 +22,7 @@ namespace Domain.Classes.Mage
             _prefabProvider = prefabProvider;
         }
 
-        public void Init(EcsSystems systems)
+        public void Run(EcsSystems systems)
         {
             _world = systems.GetWorld();
 
@@ -34,13 +34,7 @@ namespace Domain.Classes.Mage
                 _uiProvider.FirstAbility.Name.SetText("Fireball");
                 _uiProvider.SecondAbility.Name.SetText("Bomb");
                 _uiProvider.SpecialAbility.Name.SetText("Curse");
-            }
-        }
 
-        public void Run(EcsSystems systems)
-        {
-            foreach (int player in _world.Filter<PlayerComponent>().Inc<MageTag>().End())
-            {
                 if (_inputSystem.Player.FirstAbility.WasPressedThisFrame())
                 {
                     SpawnFirstAbility();
@@ -89,9 +83,6 @@ namespace Domain.Classes.Mage
             }
         }
 
-        private void SpawnSpecialAbility()
-        {
-            
-        }
+        private void SpawnSpecialAbility() { }
     }
 }

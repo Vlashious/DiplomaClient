@@ -17,7 +17,6 @@ namespace Domain.Network
         private readonly CancellationTokenSource _cancellationToken = new();
         private HubConnection _connection;
         private EcsWorld _world;
-        private int _thisId;
 
         public NetworkingSystem(PrefabProvider prefabProvider)
         {
@@ -46,7 +45,7 @@ namespace Domain.Network
         {
             while (!_cancellationToken.IsCancellationRequested)
             {
-                await UniTask.Delay(10);
+                await UniTask.Delay(40);
 
                 foreach (int entity in _world.Filter<PlayerComponent>().Inc<Synchronize>().Inc<TransformComponent>().End())
                 {
@@ -58,6 +57,9 @@ namespace Domain.Network
                     writer.Write(pos.Transform.position.x);
                     writer.Write(pos.Transform.position.y);
                     writer.Write(pos.Transform.position.z);
+                    writer.Write(pos.Transform.rotation.eulerAngles.x);
+                    writer.Write(pos.Transform.rotation.eulerAngles.y);
+                    writer.Write(pos.Transform.rotation.eulerAngles.z);
                     await _connection.SendAsync("SendPlayerData", stream.ToArray());
                 }
             }
@@ -71,16 +73,21 @@ namespace Domain.Network
             var x = reader.ReadSingle();
             var y = reader.ReadSingle();
             var z = reader.ReadSingle();
+            var rx = reader.ReadSingle();
+            var ry = reader.ReadSingle();
+            var rz = reader.ReadSingle();
             var position = new float3(x, y, z);
+            var rotation = new float3(rx, ry, rz);
 
             foreach (int entity in _world.Filter<Synchronize>().Inc<TransformComponent>().End())
             {
                 var entityId = _world.GetPool<Synchronize>().Get(entity);
 
-                if (id != _thisId && entityId.Id == id)
+                if (entityId.Id == id)
                 {
                     ref var transform = ref _world.GetPool<TransformComponent>().Get(entity);
                     transform.Transform.position = position;
+                    transform.Transform.rotation = Quaternion.Euler(rotation);
                     break;
                 }
             }
@@ -116,7 +123,6 @@ namespace Domain.Network
             var position = new float3(x, y, z);
             var playerSpawnEvent = _world.NewEntity();
             _world.GetPool<SpawnPlayerEvent>().Add(playerSpawnEvent) = new SpawnPlayerEvent {Position = position, SpawnWithId = id};
-            _thisId = id;
         }
 
         private void OnSpawnNetworkPlayer(byte[] data)

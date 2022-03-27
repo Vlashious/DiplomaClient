@@ -40,6 +40,7 @@ namespace Domain.Player
                 playerName = new NameComponent("Me");
                 world.GetPool<MageTag>().Add(playerEntity);
                 world.GetPool<Synchronize>().Add(playerEntity).Id = spawnInfo.SpawnWithId;
+                transformComponent.Transform.position = spawnInfo.Position;
 
                 world.GetPool<SpawnPlayerEvent>().Del(spawnPlayer);
             }

@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Unity.Mathematics;
 
 namespace Domain.Player
 {
     public struct SpawnPlayerEvent
     {
-        public Guid SpawnWithId;
+        public int SpawnWithId;
+        public float3 Position;
     }
 }

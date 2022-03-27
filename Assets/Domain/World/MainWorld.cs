@@ -49,15 +49,6 @@ namespace Domain.World
         public void Tick()
         {
             _ecsSystems?.Run();
-
-            int[] entities = Array.Empty<int>();
-            _ecsWorld.GetAllEntities(ref entities);
-
-            foreach (int entity in entities)
-            {
-                var components = Array.Empty<object>();
-                _ecsWorld.GetComponents(entity, ref components);
-            }
         }
 
         public void Dispose()

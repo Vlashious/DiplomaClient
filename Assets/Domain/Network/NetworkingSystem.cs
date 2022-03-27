@@ -1,25 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.IO;
+using System.Threading;
 using Cysharp.Threading.Tasks;
-using Domain.Network.Commands;
 using Domain.Player;
 using Domain.Providers;
 using Domain.Shared;
 using Leopotam.EcsLite;
 using Microsoft.AspNetCore.SignalR.Client;
+using Unity.Mathematics;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Domain.Network
 {
-    public class NetworkingSystem : IEcsInitSystem, IEcsRunSystem, IEcsDestroySystem
+    public class NetworkingSystem : IEcsInitSystem, IEcsDestroySystem
     {
-        private readonly Guid _thisId = Guid.NewGuid();
-        private readonly Queue<INetworkCommand> _commands = new();
-
         private readonly PrefabProvider _prefabProvider;
+        private readonly CancellationTokenSource _cancellationToken = new();
         private HubConnection _connection;
         private EcsWorld _world;
+        private int _thisId;
 
         public NetworkingSystem(PrefabProvider prefabProvider)
         {
@@ -31,81 +29,117 @@ namespace Domain.Network
             _world = systems.GetWorld();
 
             _connection = new HubConnectionBuilder()
-                         .WithUrl("http://localhost:5176/worldHub")
+                         .WithUrl("http://localhost:5176/world")
                          .Build();
 
-            _connection.On<Guid, byte[]>("SendTransformUpdate", OnTransformUpdateReceived);
-            _connection.On<Guid>("OtherPlayerConnect", OnOtherPlayerConnected);
-            _connection.On<Guid, Guid[]>("ThisPlayerConnect", OnThisPlayerConnected);
-            _connection.On<Guid>("OnPlayerDisconnected", OnPlayerDisconnected);
+            _connection.On<byte[]>("SpawnPlayer", OnSpawnPlayer);
+            _connection.On<byte[]>("SpawnNetworkPlayer", OnSpawnNetworkPlayer);
+            _connection.On<byte[]>("UpdatePlayerPosition", UpdatePlayerPosition);
+            _connection.On<byte[]>("DestroyPlayer", OnDestroyPlayer);
 
             await _connection.StartAsync();
-
-            await _connection.SendAsync("ThisPlayerConnect", _thisId, Array.Empty<Guid>());
+            UniTask.RunOnThreadPool(SendPlayerData).Forget();
             Debug.Log("Connected as player!");
         }
 
-        private void OnTransformUpdateReceived(Guid userId, byte[] data)
+        private async UniTask SendPlayerData()
         {
-            if (userId != _thisId)
+            while (!_cancellationToken.IsCancellationRequested)
             {
-                _commands.Enqueue(new UpdatePositionCommand(_world, userId, data));
+                await UniTask.Delay(10);
+
+                foreach (int entity in _world.Filter<PlayerComponent>().Inc<Synchronize>().Inc<TransformComponent>().End())
+                {
+                    var id = _world.GetPool<Synchronize>().Get(entity).Id;
+                    var pos = _world.GetPool<TransformComponent>().Get(entity);
+                    using var stream = new MemoryStream();
+                    using var writer = new BinaryWriter(stream);
+                    writer.Write(id);
+                    writer.Write(pos.Transform.position.x);
+                    writer.Write(pos.Transform.position.y);
+                    writer.Write(pos.Transform.position.z);
+                    await _connection.SendAsync("SendPlayerData", stream.ToArray());
+                }
             }
         }
 
-        private void OnOtherPlayerConnected(Guid userId)
+        private void UpdatePlayerPosition(byte[] data)
         {
-            var networkPlayer = Object.Instantiate(_prefabProvider.NetworkPlayer);
-            var playerEntity = _world.NewEntity();
-            ref var player = ref _world.GetPool<Synchronize>().Add(playerEntity);
-            player.Id = userId;
-            ref var transform = ref _world.GetPool<TransformComponent>().Add(playerEntity);
-            transform.Transform = networkPlayer.Transform;
-        }
+            using var stream = new MemoryStream(data);
+            using var reader = new BinaryReader(stream);
+            var id = reader.ReadInt32();
+            var x = reader.ReadSingle();
+            var y = reader.ReadSingle();
+            var z = reader.ReadSingle();
+            var position = new float3(x, y, z);
 
-        private void OnThisPlayerConnected(Guid userId, Guid[] otherPlayers)
-        {
-            _commands.Enqueue(new SpawnMainPlayerCommand(_world, userId));
-
-            foreach (Guid otherPlayer in otherPlayers)
-            {
-                OnOtherPlayerConnected(otherPlayer);
-            }
-        }
-
-        private void OnPlayerDisconnected(Guid userId)
-        {
             foreach (int entity in _world.Filter<Synchronize>().Inc<TransformComponent>().End())
             {
-                ref var transform = ref _world.GetPool<TransformComponent>().Get(entity);
-                ref var player = ref _world.GetPool<Synchronize>().Get(entity);
+                var entityId = _world.GetPool<Synchronize>().Get(entity);
 
-                if (player.Id == userId)
+                if (id != _thisId && entityId.Id == id)
                 {
+                    ref var transform = ref _world.GetPool<TransformComponent>().Get(entity);
+                    transform.Transform.position = position;
+                    break;
+                }
+            }
+        }
+
+        private void OnDestroyPlayer(byte[] data)
+        {
+            using var stream = new MemoryStream(data);
+            using var reader = new BinaryReader(stream);
+            var id = reader.ReadInt32();
+
+            foreach (int entity in _world.Filter<Synchronize>().Inc<TransformComponent>().End())
+            {
+                var entityId = _world.GetPool<Synchronize>().Get(entity);
+
+                if (entityId.Id == id)
+                {
+                    var transform = _world.GetPool<TransformComponent>().Get(entity);
                     Object.Destroy(transform.Transform.gameObject);
                     _world.DelEntity(entity);
                 }
             }
         }
 
-        public async void Run(EcsSystems systems)
+        private void OnSpawnPlayer(byte[] data)
         {
-            while (_commands.TryDequeue(out var command))
-            {
-                command.Do();
-            }
+            using var stream = new MemoryStream(data);
+            using var reader = new BinaryReader(stream);
+            var id = reader.ReadInt32();
+            var x = reader.ReadSingle();
+            var y = reader.ReadSingle();
+            var z = reader.ReadSingle();
+            var position = new float3(x, y, z);
+            var playerSpawnEvent = _world.NewEntity();
+            _world.GetPool<SpawnPlayerEvent>().Add(playerSpawnEvent) = new SpawnPlayerEvent {Position = position, SpawnWithId = id};
+            _thisId = id;
+        }
 
-            foreach (int syncEntity in _world.Filter<TransformComponent>().Inc<Synchronize>().Inc<PlayerComponent>().End())
-            {
-                var trasnform = _world.GetPool<TransformComponent>().Get(syncEntity);
-                var id = _world.GetPool<Synchronize>().Get(syncEntity);
-
-                await _connection.SendAsync("SendTransformUpdate", id.Id, trasnform.Serialize());
-            }
+        private void OnSpawnNetworkPlayer(byte[] data)
+        {
+            using var stream = new MemoryStream(data);
+            using var reader = new BinaryReader(stream);
+            var id = reader.ReadInt32();
+            var x = reader.ReadSingle();
+            var y = reader.ReadSingle();
+            var z = reader.ReadSingle();
+            var position = new float3(x, y, z);
+            var networkPlayer = Object.Instantiate(_prefabProvider.NetworkPlayer);
+            var playerEntity = _world.NewEntity();
+            ref var player = ref _world.GetPool<Synchronize>().Add(playerEntity);
+            player.Id = id;
+            ref var transform = ref _world.GetPool<TransformComponent>().Add(playerEntity);
+            transform.Transform = networkPlayer.Transform;
+            transform.Transform.position = position;
         }
 
         public async void Destroy(EcsSystems systems)
         {
+            _cancellationToken.Cancel();
             await _connection.DisposeAsync();
         }
     }

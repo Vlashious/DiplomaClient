@@ -1,10 +1,10 @@
-﻿using Domain.Player;
+﻿using Domain.Network;
+using Domain.Player;
 using Domain.Providers;
 using Domain.Selection;
 using Domain.Shared;
 using Domain.UI;
 using Leopotam.EcsLite;
-using UnityEngine;
 
 namespace Domain.Classes.Mage
 {
@@ -12,14 +12,16 @@ namespace Domain.Classes.Mage
     {
         private readonly UIProvider _uiProvider;
         private readonly PrefabProvider _prefabProvider;
+        private readonly SynchronizeMap _synchronizeMap;
         private EcsWorld _world;
         private PlayerInputs _inputSystem;
         private PlayerProvider _player;
 
-        public MageSystem(UIProvider uiProvider, PrefabProvider prefabProvider)
+        public MageSystem(UIProvider uiProvider, PrefabProvider prefabProvider, SynchronizeMap synchronizeMap)
         {
             _uiProvider = uiProvider;
             _prefabProvider = prefabProvider;
+            _synchronizeMap = synchronizeMap;
         }
 
         public void Run(EcsSystems systems)
@@ -56,14 +58,10 @@ namespace Domain.Classes.Mage
         {
             foreach (int entity in _world.Filter<TransformComponent>().Inc<SelectedTag>().End())
             {
-                var target = _world.GetPool<TransformComponent>().Get(entity);
-                var fireball = _world.NewEntity();
-                var go = Object.Instantiate(_prefabProvider.Fireball, _player.Transform.position, Quaternion.identity);
-                _world.GetPool<TransformComponent>().Add(fireball).Transform = go.transform;
-                ref var projectile = ref _world.GetPool<DamageProjectile>().Add(fireball);
-                projectile.Speed = 20;
-                projectile.Target = target.Transform;
-                projectile.Damage = 20;
+                var projectileEntity = _world.NewEntity();
+
+                _world.GetPool<MageFirstAbilitySpawnEvent>().Add(projectileEntity) =
+                    new MageFirstAbilitySpawnEvent(_synchronizeMap[entity], _player.Transform.position);
             }
         }
 

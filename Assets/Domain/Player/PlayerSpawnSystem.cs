@@ -13,11 +13,13 @@ namespace Domain.Player
     {
         private readonly PrefabProvider _prefabProvider;
         private readonly ConfigProvider _configProvider;
+        private readonly SynchronizeMap _synchronizeMap;
 
-        public PlayerSpawnSystem(PrefabProvider prefabProvider, ConfigProvider configProvider)
+        public PlayerSpawnSystem(PrefabProvider prefabProvider, ConfigProvider configProvider, SynchronizeMap synchronizeMap)
         {
             _prefabProvider = prefabProvider;
             _configProvider = configProvider;
+            _synchronizeMap = synchronizeMap;
         }
 
         public void Run(EcsSystems systems)
@@ -39,7 +41,7 @@ namespace Domain.Player
                 ref var playerName = ref world.GetPool<NameComponent>().Add(playerEntity);
                 playerName = new NameComponent("Me");
                 world.GetPool<MageTag>().Add(playerEntity);
-                world.GetPool<Synchronize>().Add(playerEntity).Id = spawnInfo.SpawnWithId;
+                _synchronizeMap.Add(playerEntity, spawnInfo.SpawnWithId);
                 transformComponent.Transform.position = spawnInfo.Position;
 
                 world.GetPool<SpawnPlayerEvent>().Del(spawnPlayer);

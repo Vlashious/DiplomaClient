@@ -1,14 +1,13 @@
 ﻿using System;
 using Domain.Classes.Mage;
-using Domain.Damage;
 using Domain.Enemy.Whale;
 using Domain.Health;
 using Domain.Network;
 using Domain.Player;
+using Domain.Projectile;
 using Domain.Selection;
 using Domain.Shared;
 using Leopotam.EcsLite;
-using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
@@ -39,7 +38,6 @@ namespace Domain.World
                .Add(_resolver.Resolve<SelectionViewSystem>())
                .Add(_resolver.Resolve<WhaleSpawnSystem>())
                .Add(_resolver.Resolve<ProjectileMoveSystem>())
-               .Add(_resolver.Resolve<DealDamageSystem>())
                .Add(_resolver.Resolve<HealthSystem>())
                .Add(_resolver.Resolve<CreatureInspectorSystem>())
                .Add(_resolver.Resolve<NetworkingSystem>())

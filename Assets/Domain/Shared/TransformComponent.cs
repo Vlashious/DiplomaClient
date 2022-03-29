@@ -9,6 +9,11 @@ namespace Domain.Shared
     {
         public Transform Transform;
 
+        public TransformComponent(Transform transform)
+        {
+            Transform = transform;
+        }
+
         public byte[] Serialize()
         {
             using var stream = new MemoryStream(sizeof(float) * 3);

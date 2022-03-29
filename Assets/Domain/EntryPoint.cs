@@ -1,9 +1,9 @@
 using Domain.Classes.Mage;
-using Domain.Damage;
 using Domain.Enemy.Whale;
 using Domain.Health;
 using Domain.Network;
 using Domain.Player;
+using Domain.Projectile;
 using Domain.Providers;
 using Domain.Selection;
 using Domain.Shared;
@@ -45,6 +45,7 @@ namespace Domain
 
         private void RegisterSystems(IContainerBuilder builder)
         {
+            builder.Register<SynchronizeMap>(Lifetime.Singleton);
             builder.Register<PlayerSystem>(Lifetime.Singleton);
             builder.Register<PlayerSpawnSystem>(Lifetime.Singleton);
             builder.Register<MageSystem>(Lifetime.Singleton);
@@ -53,7 +54,6 @@ namespace Domain
             builder.Register<SelectionSystem>(Lifetime.Singleton);
             builder.Register<SelectionViewSystem>(Lifetime.Singleton);
             builder.Register<ProjectileMoveSystem>(Lifetime.Singleton);
-            builder.Register<DealDamageSystem>(Lifetime.Singleton);
             builder.Register<HealthSystem>(Lifetime.Singleton);
             builder.Register<CreatureInspectorSystem>(Lifetime.Singleton);
             builder.Register<NetworkingSystem>(Lifetime.Singleton);

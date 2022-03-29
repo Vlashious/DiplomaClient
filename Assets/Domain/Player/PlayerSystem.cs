@@ -1,5 +1,7 @@
 ﻿using Domain.Health;
+using Domain.Network;
 using Domain.Providers;
+using Domain.Shared;
 using Domain.UI;
 using Domain.Utils;
 using Leopotam.EcsLite;
@@ -13,23 +15,28 @@ namespace Domain.Player
         private readonly ConfigProvider _configProvider;
         private readonly UtilCamera _camera;
         private readonly UIProvider _uiProvider;
+        private readonly SynchronizeMap _synchronizeMap;
+        private EcsWorld _world;
+        private int _id;
 
-        public PlayerSystem(ConfigProvider configProvider, UtilCamera camera, UIProvider uiProvider)
+        public PlayerSystem(ConfigProvider configProvider, UtilCamera camera, UIProvider uiProvider, SynchronizeMap synchronizeMap)
         {
             _configProvider = configProvider;
             _camera = camera;
             _uiProvider = uiProvider;
+            _synchronizeMap = synchronizeMap;
         }
 
         public void Run(EcsSystems systems)
         {
-            var world = systems.GetWorld();
+            _world = systems.GetWorld();
 
-            foreach (int player in world.Filter<PlayerComponent>().End())
+            foreach (int player in _world.Filter<PlayerComponent>().End())
             {
-                var playerProvider = world.GetPool<PlayerComponent>().Get(player);
+                _id = _synchronizeMap[player];
+                var playerProvider = _world.GetPool<PlayerComponent>().Get(player);
                 CheckMove(playerProvider.Player);
-                UpdatePlayerInspector(world);
+                UpdatePlayerInspector(_world);
             }
         }
 
@@ -52,8 +59,16 @@ namespace Domain.Player
             moveDirection = math.normalizesafe(moveDirection);
             player.CharacterController.Move(moveDirection * _configProvider.PlayerSpeed * Time.deltaTime);
 
-            player.Transform.rotation = Quaternion.Euler(player.Transform.rotation.eulerAngles.x,
-                _camera.transform.rotation.eulerAngles.y, player.Transform.rotation.eulerAngles.z);
+            var rotation = player.Transform.rotation;
+
+            rotation = Quaternion.Euler(rotation.eulerAngles.x,
+                _camera.transform.rotation.eulerAngles.y, rotation.eulerAngles.z);
+            player.Transform.rotation = rotation;
+
+            var updateEvent = _world.NewEntity();
+
+            _world.GetPool<EntityPositionChangedEvent>().Add(updateEvent) =
+                new EntityPositionChangedEvent(player.Transform.position, rotation.eulerAngles, _id);
         }
 
         private void UpdatePlayerInspector(EcsWorld world)

@@ -2,7 +2,7 @@
 
 namespace Domain.Classes.Mage
 {
-    public class MageCurseSystem : IEcsRunSystem
+    public class MageCurseViewSystem : IEcsRunSystem
     {
         public void Run(EcsSystems systems)
         {

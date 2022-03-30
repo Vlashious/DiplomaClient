@@ -38,6 +38,7 @@ namespace Domain.Health
                     if (healthUpdateEvent.NewHealth <= 0)
                     {
                         Object.Destroy(go.Transform.gameObject);
+                        world.DelEntity(innerId);
                         world.DelEntity(entity);
                     }
                 }

@@ -1,4 +1,5 @@
-﻿using Domain.Health;
+﻿using System.IO;
+using Domain.Health;
 using Domain.Network;
 using Domain.Providers;
 using Domain.Shared;
@@ -66,9 +67,18 @@ namespace Domain.Player
             player.Transform.rotation = rotation;
 
             var updateEvent = _world.NewEntity();
+            using var stream = new MemoryStream();
+            using var writer = new BinaryWriter(stream);
+            writer.Write(_id);
+            writer.Write(player.Transform.position.x);
+            writer.Write(player.Transform.position.y);
+            writer.Write(player.Transform.position.z);
+            writer.Write(rotation.eulerAngles.x);
+            writer.Write(rotation.eulerAngles.y);
+            writer.Write(rotation.eulerAngles.z);
 
-            _world.GetPool<EntityPositionChangedEvent>().Add(updateEvent) =
-                new EntityPositionChangedEvent(player.Transform.position, rotation.eulerAngles, _id);
+            _world.GetPool<NetworkPacket>().Add(updateEvent) =
+                new NetworkPacket("SendPlayerData", stream.ToArray());
         }
 
         private void UpdatePlayerInspector(EcsWorld world)

@@ -38,7 +38,7 @@ namespace Domain.Projectile
                     if (math.distancesq(moveDir, targetPos.position) < 0.1f)
                     {
                         world.DelEntity(entity);
-                        Object.Destroy(projectileTransform.Transform.gameObject, 0.5f);
+                        Object.Destroy(projectileTransform.Transform.gameObject, 1f);
                     }
                 }
             }

@@ -1,6 +1,6 @@
-﻿using Domain.Network;
+﻿using System.IO;
+using Domain.Network;
 using Domain.Player;
-using Domain.Providers;
 using Domain.Selection;
 using Domain.Shared;
 using Domain.UI;
@@ -11,16 +11,14 @@ namespace Domain.Classes.Mage
     public class MageSystem : IEcsRunSystem
     {
         private readonly UIProvider _uiProvider;
-        private readonly PrefabProvider _prefabProvider;
         private readonly SynchronizeMap _synchronizeMap;
         private EcsWorld _world;
         private PlayerInputs _inputSystem;
         private PlayerProvider _player;
 
-        public MageSystem(UIProvider uiProvider, PrefabProvider prefabProvider, SynchronizeMap synchronizeMap)
+        public MageSystem(UIProvider uiProvider, SynchronizeMap synchronizeMap)
         {
             _uiProvider = uiProvider;
-            _prefabProvider = prefabProvider;
             _synchronizeMap = synchronizeMap;
         }
 
@@ -58,10 +56,16 @@ namespace Domain.Classes.Mage
         {
             foreach (int entity in _world.Filter<TransformComponent>().Inc<SelectedTag>().End())
             {
-                var projectileEntity = _world.NewEntity();
+                using var ms = new MemoryStream();
+                using var wr = new BinaryWriter(ms);
+                wr.Write(_synchronizeMap[entity]);
+                wr.Write(_player.Transform.position.x);
+                wr.Write(_player.Transform.position.y);
+                wr.Write(_player.Transform.position.z);
+                var networkPacket = _world.NewEntity();
 
-                _world.GetPool<MageFirstAbilitySpawnEvent>().Add(projectileEntity) =
-                    new MageFirstAbilitySpawnEvent(_synchronizeMap[entity], _player.Transform.position);
+                _world.GetPool<NetworkPacket>().Add(networkPacket) =
+                    new NetworkPacket("SpawnMageProjectile", ms.ToArray());
             }
         }
 
@@ -69,15 +73,13 @@ namespace Domain.Classes.Mage
         {
             foreach (int entity in _world.Filter<TransformComponent>().Inc<SelectedTag>().End())
             {
-                var bombPool = _world.GetPool<MageBomb>();
+                using var ms = new MemoryStream();
+                using var wr = new BinaryWriter(ms);
+                wr.Write(_synchronizeMap[entity]);
+                var networkPacket = _world.NewEntity();
 
-                if (bombPool.Has(entity)) { }
-                else
-                {
-                    ref var bomb = ref _world.GetPool<MageBomb>().Add(entity);
-                    bomb.Duration = bomb.MaxDuration = 5;
-                    bomb.Damage = 100;
-                }
+                _world.GetPool<NetworkPacket>().Add(networkPacket) =
+                    new NetworkPacket("SpawnMageBomb", ms.ToArray());
             }
         }
 

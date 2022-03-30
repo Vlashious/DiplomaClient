@@ -40,6 +40,7 @@ namespace Domain.Network
             _connection.On<byte[]>("UpdatePlayerPosition", UpdatePlayerPosition);
             _connection.On<byte[]>("DestroyPlayer", OnDestroyPlayer);
             _connection.On<byte[]>("SpawnMageProjectile", OnSpawnMageProjectile);
+            _connection.On<byte[]>("SpawnMageBomb", OnSpawnMageBomb);
             _connection.On<byte[]>("SpawnWhale", OnSpawnWhale);
             _connection.On<byte[]>("UpdateHealth", OnUpdateHealth);
 
@@ -65,7 +66,7 @@ namespace Domain.Network
             {
                 var innerId = _synchronizeMap.GetInnerId(serverId);
 
-                if (innerId == serverId)
+                if (innerId == entity)
                 {
                     ref var transform = ref _world.GetPool<TransformComponent>().Get(innerId);
                     transform.Transform.position = position;
@@ -85,7 +86,7 @@ namespace Domain.Network
             {
                 var innerId = _synchronizeMap.GetInnerId(serverId);
 
-                if (innerId == serverId)
+                if (innerId == entity)
                 {
                     var transform = _world.GetPool<TransformComponent>().Get(innerId);
                     Object.Destroy(transform.Transform.gameObject);
@@ -128,32 +129,10 @@ namespace Domain.Network
         {
             var world = systems.GetWorld();
 
-            foreach (int entity in world.Filter<MageFirstAbilitySpawnEvent>().End())
+            foreach (var entity in world.Filter<NetworkPacket>().End())
             {
-                var projectile = world.GetPool<MageFirstAbilitySpawnEvent>().Get(entity);
-                using var ms = new MemoryStream();
-                using var wr = new BinaryWriter(ms);
-                wr.Write(projectile.TargetId);
-                wr.Write(projectile.SpawnPos.x);
-                wr.Write(projectile.SpawnPos.y);
-                wr.Write(projectile.SpawnPos.z);
-                _connection.SendAsync("SpawnMageProjectile", ms.ToArray());
-                world.DelEntity(entity);
-            }
-
-            foreach (int entity in world.Filter<EntityPositionChangedEvent>().End())
-            {
-                var data = world.GetPool<EntityPositionChangedEvent>().Get(entity);
-                using var stream = new MemoryStream();
-                using var writer = new BinaryWriter(stream);
-                writer.Write(data.Id);
-                writer.Write(data.NewPosition.x);
-                writer.Write(data.NewPosition.y);
-                writer.Write(data.NewPosition.z);
-                writer.Write(data.NewRotation.x);
-                writer.Write(data.NewRotation.y);
-                writer.Write(data.NewRotation.z);
-                _connection.SendAsync("SendPlayerData", stream.ToArray());
+                var packet = world.GetPool<NetworkPacket>().Get(entity);
+                _connection.SendAsync(packet.Method, packet.Data);
                 world.DelEntity(entity);
             }
         }
@@ -172,6 +151,27 @@ namespace Domain.Network
             var visuals = Object.Instantiate(_prefabProvider.Fireball, new float3(startX, startY, startZ), Quaternion.identity);
             _world.GetPool<Projectile.Projectile>().Add(projectile) = new Projectile.Projectile(targetServerId, speed);
             _world.GetPool<TransformComponent>().Add(projectile) = new TransformComponent(visuals.transform);
+        }
+
+        private void OnSpawnMageBomb(byte[] data)
+        {
+            using var ms = new MemoryStream(data);
+            using var rd = new BinaryReader(ms);
+            var targetServerId = rd.ReadInt32();
+            var duration = rd.ReadSingle();
+
+            var inspectorPool = _world.GetPool<CreatureInspector>();
+            var innerId = _synchronizeMap.GetInnerId(targetServerId);
+
+            if (inspectorPool.Has(innerId))
+            {
+                var bomb = _world.NewEntity();
+                var inspector = inspectorPool.Get(innerId);
+
+                var effectProvider = Object.Instantiate(inspector.CreatureInspectorProvider.UIEffectProviderPrefab,
+                    inspector.CreatureInspectorProvider.EffectsRoot);
+                _world.GetPool<MageBomb>().Add(bomb) = new MageBomb(duration, targetServerId, effectProvider);
+            }
         }
 
         private void OnSpawnWhale(byte[] data)

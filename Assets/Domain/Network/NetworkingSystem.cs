@@ -32,7 +32,7 @@ namespace Domain.Network
             _world = systems.GetWorld();
 
             _connection = new HubConnectionBuilder()
-                         .WithUrl("http://localhost:5176/world")
+                         .WithUrl("http://192.168.100.8:5176/world")
                          .Build();
 
             _connection.On<byte[]>("SpawnPlayer", OnSpawnPlayer);

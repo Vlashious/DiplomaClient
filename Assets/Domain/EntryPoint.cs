@@ -1,11 +1,12 @@
+using Domain.Classes;
 using Domain.Classes.Mage;
+using Domain.Classes.Priest;
 using Domain.Enemy.Whale;
 using Domain.Health;
 using Domain.Network;
 using Domain.Player;
 using Domain.Projectile;
 using Domain.Providers;
-using Domain.Selection;
 using Domain.Shared;
 using Domain.UI;
 using Domain.Utils;
@@ -42,7 +43,7 @@ namespace Domain
 
             builder.UseEntryPoints(Lifetime.Singleton, pointsBuilder =>
             {
-                pointsBuilder.Add<MainWorld>();
+                pointsBuilder.Add<MainWorld>().As<MainWorld>();
                 pointsBuilder.Add<HUDController>();
             });
         }
@@ -60,13 +61,13 @@ namespace Domain
             builder.Register<PlayerSpawnSystem>(Lifetime.Singleton);
             builder.Register<MageSystem>(Lifetime.Singleton);
             builder.Register<MageBombSystem>(Lifetime.Singleton);
-            builder.Register<SelectionSystem>(Lifetime.Singleton);
-            builder.Register<SelectionViewSystem>(Lifetime.Singleton);
+            builder.Register<PriestSystem>(Lifetime.Singleton);
             builder.Register<ProjectileMoveSystem>(Lifetime.Singleton);
             builder.Register<HealthSystem>(Lifetime.Singleton);
             builder.Register<CreatureInspectorSystem>(Lifetime.Singleton);
             builder.Register<NetworkingSystem>(Lifetime.Singleton);
             builder.Register<WhaleSpawnSystem>(Lifetime.Singleton);
+            builder.Register<ChangeClassSystem>(Lifetime.Singleton);
         }
     }
 }

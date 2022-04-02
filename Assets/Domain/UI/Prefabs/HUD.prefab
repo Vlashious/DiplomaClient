@@ -94,7 +94,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShopProvider: {fileID: 8054334570550432905, guid: 14a6389202a29bf4d84d2a4810827532, type: 3}
-  InfoProvider: {fileID: 0}
+  InfoProvider: {fileID: 5749254506811197212, guid: 9966ee49aeb63ea45997d3fe3f0e69b7, type: 3}
 --- !u!1 &6155794888616080582
 GameObject:
   m_ObjectHideFlags: 0

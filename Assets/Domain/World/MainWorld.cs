@@ -1,11 +1,12 @@
 ﻿using System;
+using Domain.Classes;
 using Domain.Classes.Mage;
+using Domain.Classes.Priest;
 using Domain.Enemy.Whale;
 using Domain.Health;
 using Domain.Network;
 using Domain.Player;
 using Domain.Projectile;
-using Domain.Selection;
 using Domain.Shared;
 using Leopotam.EcsLite;
 using VContainer;
@@ -16,7 +17,7 @@ namespace Domain.World
     public sealed class MainWorld : IInitializable, ITickable, IDisposable
     {
         private readonly IObjectResolver _resolver;
-        private EcsWorld _ecsWorld;
+        public EcsWorld World { get; private set; }
         private EcsSystems _ecsSystems;
 
         public MainWorld(IObjectResolver resolver)
@@ -26,21 +27,21 @@ namespace Domain.World
 
         public void Initialize()
         {
-            _ecsWorld = new EcsWorld();
-            _ecsSystems = new EcsSystems(_ecsWorld);
+            World = new EcsWorld();
+            _ecsSystems = new EcsSystems(World);
 
             _ecsSystems
                .Add(_resolver.Resolve<PlayerSystem>())
                .Add(_resolver.Resolve<PlayerSpawnSystem>())
                .Add(_resolver.Resolve<MageSystem>())
                .Add(_resolver.Resolve<MageBombSystem>())
-               .Add(_resolver.Resolve<SelectionSystem>())
-               .Add(_resolver.Resolve<SelectionViewSystem>())
+               .Add(_resolver.Resolve<PriestSystem>())
                .Add(_resolver.Resolve<WhaleSpawnSystem>())
                .Add(_resolver.Resolve<ProjectileMoveSystem>())
                .Add(_resolver.Resolve<HealthSystem>())
                .Add(_resolver.Resolve<CreatureInspectorSystem>())
                .Add(_resolver.Resolve<NetworkingSystem>())
+               .Add(_resolver.Resolve<ChangeClassSystem>())
                .Init();
         }
 
@@ -57,10 +58,10 @@ namespace Domain.World
                 _ecsSystems = null;
             }
 
-            if (_ecsWorld is not null)
+            if (World is not null)
             {
-                _ecsWorld.Destroy();
-                _ecsWorld = null;
+                World.Destroy();
+                World = null;
             }
         }
     }

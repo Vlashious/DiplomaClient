@@ -31,11 +31,11 @@ namespace Domain.Projectile
                 {
                     var targetPos = transformPool.Get(innerId).Transform;
 
-                    var moveDir = Vector3.MoveTowards(projectileTransform.Transform.position, targetPos.position,
-                        damageProjectile.Speed * Time.deltaTime);
-                    projectileTransform.Transform.transform.position = moveDir;
+                    var moveDir = (targetPos.position - projectileTransform.Transform.position).normalized;
+                    moveDir = moveDir * damageProjectile.Speed * Time.deltaTime;
+                    projectileTransform.Transform.transform.position += moveDir;
 
-                    if (math.distancesq(moveDir, targetPos.position) < 0.1f)
+                    if (math.distancesq(projectileTransform.Transform.transform.position, targetPos.position) < 0.1f)
                     {
                         world.DelEntity(entity);
                         Object.Destroy(projectileTransform.Transform.gameObject, 1f);

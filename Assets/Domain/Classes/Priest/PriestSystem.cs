@@ -1,89 +1,54 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Domain.Network;
 using Domain.Player;
 using Domain.Shared;
 using Domain.UI;
-using Domain.Utils;
 using Leopotam.EcsLite;
-using UnityEngine;
 
-namespace Domain.Classes.Mage
+namespace Domain.Classes.Priest
 {
-    public class MageSystem : IEcsRunSystem
+    public class PriestSystem : IEcsRunSystem
     {
         private readonly UIProvider _uiProvider;
         private readonly SynchronizeMap _synchronizeMap;
-        private readonly UtilCamera _camera;
         private EcsWorld _world;
         private PlayerInputs _inputSystem;
         private PlayerProvider _player;
 
-        private bool _isSelecting = false;
-        private Action _abiltyToSpawn;
-
-        public MageSystem(UIProvider uiProvider, SynchronizeMap synchronizeMap, UtilCamera camera)
+        public PriestSystem(UIProvider uiProvider, SynchronizeMap synchronizeMap)
         {
             _uiProvider = uiProvider;
             _synchronizeMap = synchronizeMap;
-            _camera = camera;
         }
 
         public void Run(EcsSystems systems)
         {
             _world = systems.GetWorld();
 
-            foreach (int player in _world.Filter<PlayerComponent>().Inc<MageTag>().End())
+            foreach (int player in _world.Filter<PlayerComponent>().Inc<PriestTag>().End())
             {
                 _player = _world.GetPool<PlayerComponent>().Get(player).Player;
                 _inputSystem = _world.GetPool<PlayerComponent>().Get(player).Player.PlayerInput;
 
-                _uiProvider.FirstAbility.Name.SetText("Fireball");
-                _uiProvider.SecondAbility.Name.SetText("Bomb");
-                _uiProvider.SpecialAbility.Name.SetText("Curse");
+                _uiProvider.FirstAbility.Name.SetText("Heal");
+                _uiProvider.SecondAbility.Name.SetText("Blessing");
+                _uiProvider.SpecialAbility.Name.SetText("Resurrect");
 
                 if (_inputSystem.Player.FirstAbility.WasPressedThisFrame())
                 {
-                    _abiltyToSpawn = SpawnFirstAbility;
+                    SpawnFirstAbility();
                 }
 
                 if (_inputSystem.Player.SecondAbility.WasPressedThisFrame())
                 {
-                    _abiltyToSpawn = SpawnSecondAbility;
+                    SpawnSecondAbility();
                 }
 
                 if (_inputSystem.Player.SpecialAbility.WasPressedThisFrame())
                 {
-                    _abiltyToSpawn = SpawnSpecialAbility;
-                }
-
-                TryActivateAbility(out _);
-            }
-        }
-
-        private bool TryActivateAbility(out int clickedEntity)
-        {
-            if (_abiltyToSpawn is not null &&
-                _inputSystem.Player.Select.WasPerformedThisFrame())
-            {
-                var input = _inputSystem.Player.Select.ReadValue<Vector2>();
-                var ray = _camera.Camera.ScreenPointToRay(input);
-
-                if (Physics.Raycast(ray, out var hitInfo) &&
-                    hitInfo.transform.TryGetComponent(out PackedEntity packedEntity) &&
-                    packedEntity.Entity.Unpack(_world, out clickedEntity))
-                {
-                    _world.GetPool<Selection>().Add(clickedEntity);
-                    _abiltyToSpawn.Invoke();
-                    _world.GetPool<Selection>().Del(clickedEntity);
-
-                    _abiltyToSpawn = default;
-                    return true;
+                    SpawnSpecialAbility();
                 }
             }
-
-            clickedEntity = default;
-            return false;
         }
 
         private void SpawnFirstAbility()
@@ -99,7 +64,7 @@ namespace Domain.Classes.Mage
                 var networkPacket = _world.NewEntity();
 
                 _world.GetPool<NetworkPacket>().Add(networkPacket) =
-                    new NetworkPacket("SpawnMageProjectile", ms.ToArray());
+                    new NetworkPacket("PriestHeal", ms.ToArray());
             }
         }
 
@@ -113,7 +78,7 @@ namespace Domain.Classes.Mage
                 var networkPacket = _world.NewEntity();
 
                 _world.GetPool<NetworkPacket>().Add(networkPacket) =
-                    new NetworkPacket("SpawnMageBomb", ms.ToArray());
+                    new NetworkPacket("PriestBlessing", ms.ToArray());
             }
         }
 

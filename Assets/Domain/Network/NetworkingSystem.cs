@@ -121,8 +121,13 @@ namespace Domain.Network
             var playerEntity = _world.NewEntity();
             _synchronizeMap.Add(playerEntity, serverId);
             ref var transform = ref _world.GetPool<TransformComponent>().Add(playerEntity);
-            transform.Transform = networkPlayer.Transform;
+            transform.Transform = networkPlayer.PlayerProvider.Transform;
             transform.Transform.position = position;
+
+            _world.GetPool<CreatureInspector>().Add(playerEntity) = new CreatureInspector
+            {
+                CreatureInspectorProvider = networkPlayer.Inspector
+            };
         }
 
         public void Run(EcsSystems systems)

@@ -8,5 +8,6 @@ namespace Domain.UI
         public AbilityButtonProvider FirstAbility;
         public AbilityButtonProvider SecondAbility;
         public AbilityButtonProvider SpecialAbility;
+        public HUDProvider HUDProvider;
     }
 }

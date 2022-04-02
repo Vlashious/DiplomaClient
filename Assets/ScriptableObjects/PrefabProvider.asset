@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PrefabProvider
   m_EditorClassIdentifier: 
   Player: {fileID: 2141670470758102171, guid: 9030cd140356ad749b19b7b5a20221d6, type: 3}
-  NetworkPlayer: {fileID: 6420928980136028712, guid: e579c039fc59dfd45b2336f7d1fa9dc1, type: 3}
+  NetworkPlayer: {fileID: 7538369962526488205, guid: e579c039fc59dfd45b2336f7d1fa9dc1, type: 3}
   Selection: {fileID: 6297477042185180856, guid: 022689f6865f5fb47bad3cbc0e715227, type: 3}
   Whale: {fileID: 2330701922987609308, guid: c87fa0d6180121d42a09aff518a98e33, type: 3}
   Fireball: {fileID: 5367438716648486743, guid: dd9851bd26dd2db42be766e3124691ff, type: 3}

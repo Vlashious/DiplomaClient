@@ -19,8 +19,6 @@ namespace Domain
     public sealed class EntryPoint : LifetimeScope
     {
         [SerializeField]
-        private Transform[] _whaleSpawnPoints;
-        [SerializeField]
         private UtilCamera _utilCamera;
         [SerializeField]
         private UtilCanvas _utilCanvas;
@@ -40,7 +38,19 @@ namespace Domain
             builder.RegisterInstance(_prefabProvider);
             builder.RegisterInstance(_configProvider);
             RegisterSystems(builder);
-            builder.UseEntryPoints(Lifetime.Singleton, pointsBuilder => { pointsBuilder.Add<MainWorld>(); });
+            RegisterUI(builder);
+
+            builder.UseEntryPoints(Lifetime.Singleton, pointsBuilder =>
+            {
+                pointsBuilder.Add<MainWorld>();
+                pointsBuilder.Add<HUDController>();
+            });
+        }
+
+        private void RegisterUI(IContainerBuilder builder)
+        {
+            builder.Register<ShopProvider>(Lifetime.Transient);
+            builder.Register<InfoProvider>(Lifetime.Transient);
         }
 
         private void RegisterSystems(IContainerBuilder builder)
@@ -50,13 +60,13 @@ namespace Domain
             builder.Register<PlayerSpawnSystem>(Lifetime.Singleton);
             builder.Register<MageSystem>(Lifetime.Singleton);
             builder.Register<MageBombSystem>(Lifetime.Singleton);
-            builder.Register<WhaleSpawnSystem>(Lifetime.Singleton).WithParameter(_whaleSpawnPoints);
             builder.Register<SelectionSystem>(Lifetime.Singleton);
             builder.Register<SelectionViewSystem>(Lifetime.Singleton);
             builder.Register<ProjectileMoveSystem>(Lifetime.Singleton);
             builder.Register<HealthSystem>(Lifetime.Singleton);
             builder.Register<CreatureInspectorSystem>(Lifetime.Singleton);
             builder.Register<NetworkingSystem>(Lifetime.Singleton);
+            builder.Register<WhaleSpawnSystem>(Lifetime.Singleton);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Domain.Providers
     public sealed class PrefabProvider : ScriptableObject
     {
         public PlayerProvider Player;
-        public PlayerProvider NetworkPlayer;
+        public NetworkPlayerProvider NetworkPlayer;
         public GameObject Selection;
         public WhaleProvider Whale;
         public GameObject Fireball;

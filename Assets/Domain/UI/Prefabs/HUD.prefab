@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6155794888194371578}
   - component: {fileID: 6155794888194371576}
   - component: {fileID: 6155794888194371579}
+  - component: {fileID: 5887382054569907455}
   m_Layer: 5
   m_Name: HUD
   m_TagString: Untagged
@@ -80,6 +81,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 2
+--- !u!114 &5887382054569907455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6155794888194371525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2084f3694df4ba5a6958f6a762643ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShopProvider: {fileID: 8054334570550432905, guid: 14a6389202a29bf4d84d2a4810827532, type: 3}
+  InfoProvider: {fileID: 0}
 --- !u!1 &6155794888616080582
 GameObject:
   m_ObjectHideFlags: 0
@@ -202,7 +217,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6155794888616080634}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5887382054569907455}
+        m_TargetAssemblyTypeName: Domain.UI.HUDProvider, Domain
+        m_MethodName: OnInfoClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &6155794888616080580
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -615,7 +642,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6155794889736483456}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5887382054569907455}
+        m_TargetAssemblyTypeName: Domain.UI.HUDProvider, Domain
+        m_MethodName: OnShopClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &6155794889736483458
 MonoBehaviour:
   m_ObjectHideFlags: 0

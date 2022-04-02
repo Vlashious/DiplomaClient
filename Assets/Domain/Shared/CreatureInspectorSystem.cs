@@ -1,7 +1,6 @@
 ﻿using Domain.Health;
 using Domain.Utils;
 using Leopotam.EcsLite;
-using UnityEngine;
 
 namespace Domain.Shared
 {
@@ -18,13 +17,11 @@ namespace Domain.Shared
         {
             var world = systems.GetWorld();
 
-            foreach (int entity in world.Filter<CreatureInspector>().Inc<HealthComponent>().Inc<NameComponent>().End())
+            foreach (int entity in world.Filter<CreatureInspector>().Inc<HealthComponent>().End())
             {
                 ref var inspector = ref world.GetPool<CreatureInspector>().Get(entity);
                 ref var health = ref world.GetPool<HealthComponent>().Get(entity);
-                ref var name = ref world.GetPool<NameComponent>().Get(entity);
 
-                inspector.CreatureInspectorProvider.Name.SetText(name.Name);
                 inspector.CreatureInspectorProvider.SetValue(health.Health, health.MaxHealth);
             }
 
@@ -32,8 +29,8 @@ namespace Domain.Shared
             {
                 ref var inspector = ref world.GetPool<CreatureInspector>().Get(entity);
 
-                inspector.CreatureInspectorProvider.transform.LookAt(
-                    inspector.CreatureInspectorProvider.transform.position + _camera.Camera.transform.forward);
+                inspector.CreatureInspectorProvider.transform.LookAt(inspector.CreatureInspectorProvider.transform.position +
+                                                                     _camera.Camera.transform.forward);
             }
         }
     }

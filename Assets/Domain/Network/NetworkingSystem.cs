@@ -124,7 +124,9 @@ namespace Domain.Network
             var health = reader.ReadInt32();
             var position = new float3(x, y, z);
             var networkPlayer = Object.Instantiate(_prefabProvider.NetworkPlayer);
+            var ecsPacked = networkPlayer.gameObject.AddComponent<PackedEntity>();
             var playerEntity = _world.NewEntity();
+            ecsPacked.Entity = _world.PackEntity(playerEntity);
             _synchronizeMap.Add(playerEntity, serverId);
             ref var transform = ref _world.GetPool<TransformComponent>().Add(playerEntity);
             transform.Transform = networkPlayer.PlayerProvider.Transform;

@@ -39,9 +39,10 @@ namespace Domain.Health
                     {
                         Object.Destroy(go.Transform.gameObject);
                         world.DelEntity(innerId);
-                        world.DelEntity(entity);
                     }
                 }
+
+                world.DelEntity(entity);
             }
         }
     }

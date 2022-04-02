@@ -93,7 +93,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 37.05
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -280,10 +280,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6780123133598224462}
   - component: {fileID: 6780123133598224450}
-  - component: {fileID: 6780123133598224449}
   - component: {fileID: 6780123133598224448}
   - component: {fileID: 6780123133598224463}
   - component: {fileID: 2379525872178595139}
+  - component: {fileID: 8025463127228057387}
   m_Layer: 5
   m_Name: AbilityButton
   m_TagString: Untagged
@@ -343,19 +343,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &6780123133598224449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6780123133598224461}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d54531977ecb194c95e2d3aa7a5d72a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ControlPath: <Keyboard>/1
 --- !u!222 &6780123133598224448
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -397,3 +384,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: {fileID: 4452594631467045975}
+--- !u!114 &8025463127228057387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6780123133598224461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9440e522fa7334049ada42f5a357bf16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _path: <Keyboard>/1

@@ -168,7 +168,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4643526016441107221, guid: e10391f061874f24d940aae647744cc0, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4643526016441107221, guid: e10391f061874f24d940aae647744cc0, type: 3}
       propertyPath: m_AnchorMax.x
@@ -787,7 +787,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6155794888194371578, guid: bb0feb5ce0cf1d2438888f5afacaf673, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6155794888194371578, guid: bb0feb5ce0cf1d2438888f5afacaf673, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1344,6 +1344,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8025463127228057387, guid: 8d9d432c8fc082c4c8f71dc3eecb4a1d, type: 3}
+      propertyPath: _path
+      value: <Keyboard>/3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8d9d432c8fc082c4c8f71dc3eecb4a1d, type: 3}
 --- !u!224 &1645101348 stripped
@@ -1464,6 +1468,10 @@ PrefabInstance:
     - target: {fileID: 6780123133598224462, guid: 8d9d432c8fc082c4c8f71dc3eecb4a1d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8025463127228057387, guid: 8d9d432c8fc082c4c8f71dc3eecb4a1d, type: 3}
+      propertyPath: _path
+      value: <Keyboard>/2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8d9d432c8fc082c4c8f71dc3eecb4a1d, type: 3}

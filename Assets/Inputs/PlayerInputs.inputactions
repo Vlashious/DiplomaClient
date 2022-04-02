@@ -16,20 +16,20 @@
                 },
                 {
                     "name": "Look",
-                    "type": "PassThrough",
+                    "type": "Value",
                     "id": "b3e02641-699b-40ff-b956-2555f554ed44",
-                    "expectedControlType": "",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
                 },
                 {
                     "name": "Select",
-                    "type": "PassThrough",
+                    "type": "Value",
                     "id": "18011d62-2b8f-4450-b0a5-13e068b165dc",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": "Tap",
+                    "interactions": "",
                     "initialStateCheck": true
                 },
                 {
@@ -137,72 +137,6 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "RotatePC",
-                    "id": "295654be-a9d1-45fe-b91c-0a1778343060",
-                    "path": "OneModifier",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Look",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "Modifier",
-                    "id": "8fb7ff6d-d8e6-43a0-ae7f-e9e5ef1b59a2",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Look",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "Binding",
-                    "id": "8c080047-b1e9-4195-bb27-1cadde74b885",
-                    "path": "<Mouse>/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Look",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "RotatePhone",
-                    "id": "d2780dd2-1c87-4124-9b86-ed0e98244384",
-                    "path": "OneModifier",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Look",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "Modifier",
-                    "id": "190b09e5-c2a2-4d8e-991b-c1deccc6fc5c",
-                    "path": "<Touchscreen>/Press",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Look",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "Binding",
-                    "id": "610b1a18-b32f-40ae-8be2-1c5a5419e90c",
-                    "path": "<Touchscreen>/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Look",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
                     "name": "",
                     "id": "ba5f1a4a-6ef0-4111-abc8-b89fa765978c",
                     "path": "<Keyboard>/1",
@@ -247,8 +181,74 @@
                     "isPartOfComposite": false
                 },
                 {
+                    "name": "Device",
+                    "id": "a36caf6e-ecea-415c-b0ad-d0f2fa5406e0",
+                    "path": "OneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Look",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "33fdde76-4de1-445c-b866-e25b40d20119",
+                    "path": "<Pointer>/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "binding",
+                    "id": "3a84f800-7dd1-4754-aa1a-aabfdfe2737f",
+                    "path": "<Pointer>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
                     "name": "PC",
-                    "id": "7c391c84-a1bb-455e-a870-d5bcb407552e",
+                    "id": "1f7bbcb5-32c7-464f-a891-952e0cb426a8",
+                    "path": "OneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Look",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "9dcef3db-0d77-434f-bea6-09c2f10c20b6",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "binding",
+                    "id": "8d130b38-9434-474a-821d-8076a72cf3ad",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "PC",
+                    "id": "d5711a7d-58e8-4571-9cff-2042e2ffe991",
                     "path": "OneModifier",
                     "interactions": "",
                     "processors": "",
@@ -259,7 +259,7 @@
                 },
                 {
                     "name": "modifier",
-                    "id": "3138fe75-539e-45cd-baa7-aef8e40e2818",
+                    "id": "c586f73b-5a76-4566-acd4-e399e82d897b",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
@@ -270,7 +270,7 @@
                 },
                 {
                     "name": "binding",
-                    "id": "3bb2fd4e-2469-4478-a6f1-75a441a47b98",
+                    "id": "74b29641-c2ab-497f-8712-defda042200c",
                     "path": "<Pointer>/position",
                     "interactions": "",
                     "processors": "",
@@ -280,8 +280,8 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "Touch",
-                    "id": "6986a5e3-ddd4-4e24-952e-783901113a0c",
+                    "name": "Device",
+                    "id": "260d5034-a429-4b99-b488-44efafa46308",
                     "path": "OneModifier",
                     "interactions": "",
                     "processors": "",
@@ -292,8 +292,8 @@
                 },
                 {
                     "name": "modifier",
-                    "id": "aaf15682-6012-4456-8e02-68b66ab15473",
-                    "path": "<Touchscreen>/primaryTouch/tap",
+                    "id": "cbd4e7d8-6cbd-461a-b8d0-b36ce01eb3a2",
+                    "path": "<Pointer>/press",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -303,7 +303,7 @@
                 },
                 {
                     "name": "binding",
-                    "id": "d04eb978-7abc-4136-b46f-8f44f060775d",
+                    "id": "522eb316-d47c-4ed0-bf7b-ce998bbc0df3",
                     "path": "<Pointer>/position",
                     "interactions": "",
                     "processors": "",

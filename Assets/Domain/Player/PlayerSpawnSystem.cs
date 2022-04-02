@@ -37,7 +37,7 @@ namespace Domain.Player
                 transformComponent.Transform = player.Transform;
                 player.gameObject.AddComponent<PackedEntity>().Entity = world.PackEntity(playerEntity);
                 ref var playerHealth = ref world.GetPool<HealthComponent>().Add(playerEntity);
-                playerHealth = new HealthComponent(_configProvider.BasePlayerHealth);
+                playerHealth = new HealthComponent(spawnInfo.Health);
                 ref var playerName = ref world.GetPool<NameComponent>().Add(playerEntity);
                 playerName = new NameComponent("Me");
                 world.GetPool<MageTag>().Add(playerEntity);

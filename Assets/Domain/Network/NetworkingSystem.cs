@@ -103,9 +103,14 @@ namespace Domain.Network
             var x = reader.ReadSingle();
             var y = reader.ReadSingle();
             var z = reader.ReadSingle();
+            var health = reader.ReadInt32();
             var position = new float3(x, y, z);
             var playerSpawnEvent = _world.NewEntity();
-            _world.GetPool<SpawnPlayerEvent>().Add(playerSpawnEvent) = new SpawnPlayerEvent {Position = position, SpawnWithId = id};
+
+            _world.GetPool<SpawnPlayerEvent>().Add(playerSpawnEvent) = new SpawnPlayerEvent
+            {
+                Position = position, SpawnWithId = id, Health = health
+            };
         }
 
         private void OnSpawnNetworkPlayer(byte[] data)
@@ -116,6 +121,7 @@ namespace Domain.Network
             var x = reader.ReadSingle();
             var y = reader.ReadSingle();
             var z = reader.ReadSingle();
+            var health = reader.ReadInt32();
             var position = new float3(x, y, z);
             var networkPlayer = Object.Instantiate(_prefabProvider.NetworkPlayer);
             var playerEntity = _world.NewEntity();
@@ -123,6 +129,7 @@ namespace Domain.Network
             ref var transform = ref _world.GetPool<TransformComponent>().Add(playerEntity);
             transform.Transform = networkPlayer.PlayerProvider.Transform;
             transform.Transform.position = position;
+            _world.GetPool<HealthComponent>().Add(playerEntity) = new HealthComponent(health);
 
             _world.GetPool<CreatureInspector>().Add(playerEntity) = new CreatureInspector
             {

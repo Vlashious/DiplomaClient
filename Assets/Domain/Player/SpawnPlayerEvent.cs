@@ -6,5 +6,6 @@ namespace Domain.Player
     {
         public int SpawnWithId;
         public float3 Position;
+        public int Health;
     }
 }

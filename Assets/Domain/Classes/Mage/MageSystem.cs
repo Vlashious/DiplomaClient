@@ -1,12 +1,13 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Domain.Network;
 using Domain.Player;
 using Domain.Shared;
 using Domain.UI;
 using Domain.Utils;
 using Leopotam.EcsLite;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Domain.Classes.Mage
 {
@@ -15,12 +16,11 @@ namespace Domain.Classes.Mage
         private readonly UIProvider _uiProvider;
         private readonly SynchronizeMap _synchronizeMap;
         private readonly UtilCamera _camera;
+
         private EcsWorld _world;
         private PlayerInputs _inputSystem;
         private PlayerProvider _player;
-
-        private bool _isSelecting = false;
-        private Action _abiltyToSpawn;
+        private MageAbility _selectedAbility;
 
         public MageSystem(UIProvider uiProvider, SynchronizeMap synchronizeMap, UtilCamera camera)
         {
@@ -44,79 +44,100 @@ namespace Domain.Classes.Mage
 
                 if (_inputSystem.Player.FirstAbility.WasPressedThisFrame())
                 {
-                    _abiltyToSpawn = SpawnFirstAbility;
+                    _selectedAbility = MageAbility.Fireball;
                 }
 
                 if (_inputSystem.Player.SecondAbility.WasPressedThisFrame())
                 {
-                    _abiltyToSpawn = SpawnSecondAbility;
+                    _selectedAbility = MageAbility.Bomb;
                 }
 
                 if (_inputSystem.Player.SpecialAbility.WasPressedThisFrame())
                 {
-                    _abiltyToSpawn = SpawnSpecialAbility;
+                    _selectedAbility = MageAbility.Curse;
                 }
 
-                TryActivateAbility(out _);
+                TryActivateAbility();
             }
         }
 
-        private bool TryActivateAbility(out int clickedEntity)
+        private void TryActivateAbility()
         {
-            if (_abiltyToSpawn is not null &&
-                _inputSystem.Player.Select.WasPerformedThisFrame())
+            if (!EventSystem.current.IsPointerOverGameObject() &&
+                _inputSystem.Player.Select.IsPressed() &&
+                _selectedAbility is not MageAbility.None)
             {
                 var input = _inputSystem.Player.Select.ReadValue<Vector2>();
                 var ray = _camera.Camera.ScreenPointToRay(input);
 
-                if (Physics.Raycast(ray, out var hitInfo) &&
-                    hitInfo.transform.TryGetComponent(out PackedEntity packedEntity) &&
-                    packedEntity.Entity.Unpack(_world, out clickedEntity))
+                if (Physics.Raycast(ray, out var hitInfo))
                 {
-                    _world.GetPool<Selection>().Add(clickedEntity);
-                    _abiltyToSpawn.Invoke();
-                    _world.GetPool<Selection>().Del(clickedEntity);
+                    var clickedEntity = -1;
 
-                    _abiltyToSpawn = default;
-                    return true;
+                    var hasFoundEntity = hitInfo.transform.gameObject.TryGetComponent(out PackedEntity packedEntity) &&
+                                         packedEntity.Entity.Unpack(_world, out clickedEntity);
+
+                    switch (_selectedAbility)
+                    {
+                        case MageAbility.Fireball when hasFoundEntity:
+                            SpawnFirstAbility(clickedEntity);
+                            break;
+                        case MageAbility.Bomb when hasFoundEntity:
+                            SpawnSecondAbility(clickedEntity);
+                            break;
+                        case MageAbility.Curse:
+                            SpawnSpecialAbility(hitInfo.point);
+                            break;
+                    }
                 }
-            }
 
-            clickedEntity = default;
-            return false;
+                _selectedAbility = MageAbility.None;
+            }
         }
 
-        private void SpawnFirstAbility()
+        private void SpawnFirstAbility(int clickedEntity)
         {
-            foreach (int entity in _world.Filter<TransformComponent>().Inc<Selection>().End())
-            {
-                using var ms = new MemoryStream();
-                using var wr = new BinaryWriter(ms);
-                wr.Write(_synchronizeMap[entity]);
-                wr.Write(_player.Transform.position.x);
-                wr.Write(_player.Transform.position.y);
-                wr.Write(_player.Transform.position.z);
-                var networkPacket = _world.NewEntity();
+            using var ms = new MemoryStream();
+            using var wr = new BinaryWriter(ms);
+            wr.Write(_synchronizeMap[clickedEntity]);
+            wr.Write(_player.Transform.position.x);
+            wr.Write(_player.Transform.position.y);
+            wr.Write(_player.Transform.position.z);
+            var networkPacket = _world.NewEntity();
 
-                _world.GetPool<NetworkPacket>().Add(networkPacket) =
-                    new NetworkPacket("SpawnMageProjectile", ms.ToArray());
-            }
+            _world.GetPool<NetworkPacket>().Add(networkPacket) =
+                new NetworkPacket("SpawnMageProjectile", ms.ToArray());
         }
 
-        private void SpawnSecondAbility()
+        private void SpawnSecondAbility(int clickedEntity)
         {
-            foreach (int entity in _world.Filter<TransformComponent>().Inc<Selection>().End())
-            {
-                using var ms = new MemoryStream();
-                using var wr = new BinaryWriter(ms);
-                wr.Write(_synchronizeMap[entity]);
-                var networkPacket = _world.NewEntity();
+            using var ms = new MemoryStream();
+            using var wr = new BinaryWriter(ms);
+            wr.Write(_synchronizeMap[clickedEntity]);
+            var networkPacket = _world.NewEntity();
 
-                _world.GetPool<NetworkPacket>().Add(networkPacket) =
-                    new NetworkPacket("SpawnMageBomb", ms.ToArray());
-            }
+            _world.GetPool<NetworkPacket>().Add(networkPacket) =
+                new NetworkPacket("SpawnMageBomb", ms.ToArray());
         }
 
-        private void SpawnSpecialAbility() { }
+        private void SpawnSpecialAbility(float3 clickPosition)
+        {
+            using var ms = new MemoryStream();
+            using var wr = new BinaryWriter(ms);
+            wr.Write(clickPosition.x);
+            wr.Write(clickPosition.y);
+            wr.Write(clickPosition.z);
+            var networkPacket = _world.NewEntity();
+
+            _world.GetPool<NetworkPacket>().Add(networkPacket) = new NetworkPacket("SpawnMageCurse", ms.ToArray());
+        }
+    }
+
+    public enum MageAbility
+    {
+        None,
+        Fireball,
+        Bomb,
+        Curse
     }
 }

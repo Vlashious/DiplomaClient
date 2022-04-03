@@ -1,4 +1,5 @@
-﻿using Leopotam.EcsLite;
+﻿using Domain.Network;
+using Leopotam.EcsLite;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -22,6 +23,7 @@ namespace Domain.Classes.Mage
                 if (bomb.Duration <= 0)
                 {
                     Object.Destroy(bomb.EffectProvider.gameObject);
+                    Object.Destroy(bomb.Visuals.gameObject);
                     world.DelEntity(entity);
                 }
             }

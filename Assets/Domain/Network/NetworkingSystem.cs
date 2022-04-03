@@ -41,6 +41,7 @@ namespace Domain.Network
             _connection.On<byte[]>("DestroyPlayer", OnDestroyPlayer);
             _connection.On<byte[]>("SpawnMageProjectile", OnSpawnMageProjectile);
             _connection.On<byte[]>("SpawnMageBomb", OnSpawnMageBomb);
+            _connection.On<byte[]>("SpawnMageCurse", OnSpawnMageCurse);
             _connection.On<byte[]>("SpawnWhale", OnSpawnWhale);
             _connection.On<byte[]>("UpdateHealth", OnUpdateHealth);
 
@@ -175,16 +176,38 @@ namespace Domain.Network
             var duration = rd.ReadSingle();
 
             var inspectorPool = _world.GetPool<CreatureInspector>();
+            var transformPool = _world.GetPool<TransformComponent>();
             var innerId = _synchronizeMap.GetInnerId(targetServerId);
 
-            if (inspectorPool.Has(innerId))
+            if (inspectorPool.Has(innerId) && transformPool.Has(innerId))
             {
                 var bomb = _world.NewEntity();
                 var inspector = inspectorPool.Get(innerId);
+                var transform = transformPool.Get(innerId);
 
                 var effectProvider = Object.Instantiate(inspector.CreatureInspectorProvider.UIEffectProviderPrefab,
                     inspector.CreatureInspectorProvider.EffectsRoot);
-                _world.GetPool<MageBomb>().Add(bomb) = new MageBomb(duration, targetServerId, effectProvider);
+                var bombVisuals = Object.Instantiate(_prefabProvider.MageBomb, transform.Transform);
+                _world.GetPool<MageBomb>().Add(bomb) = new MageBomb(duration, targetServerId, effectProvider, bombVisuals);
+            }
+        }
+
+        private void OnSpawnMageCurse(byte[] data)
+        {
+            using var ms = new MemoryStream(data);
+            using var rd = new BinaryReader(ms);
+            var x = rd.ReadSingle();
+            var y = rd.ReadSingle();
+            var z = rd.ReadSingle();
+            var duration = rd.ReadSingle();
+            var count = rd.ReadInt32();
+
+            var vfx = Object.Instantiate(_prefabProvider.MageCurse, new float3(x, y, z), Quaternion.identity);
+            Object.Destroy(vfx, 5f);
+
+            for (int i = 0; i < count; i++)
+            {
+                var affectedEntityServerId = rd.ReadInt32();
             }
         }
 

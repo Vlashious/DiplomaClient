@@ -17,3 +17,5 @@ MonoBehaviour:
   Selection: {fileID: 6297477042185180856, guid: 022689f6865f5fb47bad3cbc0e715227, type: 3}
   Whale: {fileID: 2330701922987609308, guid: c87fa0d6180121d42a09aff518a98e33, type: 3}
   Fireball: {fileID: 5367438716648486743, guid: dd9851bd26dd2db42be766e3124691ff, type: 3}
+  MageBomb: {fileID: 3309209135599324898, guid: b258b1f0988e5ac45839d33b481bca0e, type: 3}
+  MageCurse: {fileID: 6215937857011411505, guid: 25642cce9320f6f489250bd96c6a6814, type: 3}

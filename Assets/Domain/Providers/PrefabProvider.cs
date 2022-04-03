@@ -12,5 +12,7 @@ namespace Domain.Providers
         public GameObject Selection;
         public WhaleProvider Whale;
         public GameObject Fireball;
+        public GameObject MageBomb;
+        public GameObject MageCurse;
     }
 }

@@ -17,7 +17,7 @@ using VContainer.Unity;
 
 namespace Domain
 {
-    public sealed class EntryPoint : LifetimeScope
+    public sealed class WorldEntryPoint : LifetimeScope
     {
         [SerializeField]
         private UtilCamera _utilCamera;

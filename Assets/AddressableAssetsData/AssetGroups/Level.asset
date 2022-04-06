@@ -1,0 +1,131 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Level
+  m_EditorClassIdentifier: 
+  m_GroupName: Level
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 2d323c147f41e3e41a14422784e98fb4
+  m_SerializeEntries:
+  - m_GUID: a8c0d612b5c7ed64c9b0af0482459331
+    m_Address: Assets/Art/Materials/Fireball.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - World
+  - m_GUID: f8149c1dabb32c84d985dcbc44bbbd92
+    m_Address: Assets/Art/Materials/FireballSphere.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - World
+  - m_GUID: 79985a570731ce44cb3ba0b31acfeff2
+    m_Address: Assets/Art/Materials/MageBomb.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - World
+  - m_GUID: c5b9d0ff14e19a24ba4e54bd5d523e4c
+    m_Address: Assets/Art/Shaders/FireballParticles.shadergraph
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - World
+  - m_GUID: 685573c0c208afc49acfbe04b84a59bf
+    m_Address: Assets/Art/Shaders/FireballSphere.shadergraph
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - World
+  - m_GUID: d89c41fbb77735243887ddff8a246456
+    m_Address: Assets/Art/Shaders/MageBomb.shadergraph
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - World
+  - m_GUID: 41205af362eb10a42b99c5416c7f6c70
+    m_Address: Assets/Art/Textures/fire-ball-texture.jpg
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - World
+  - m_GUID: 8d9d432c8fc082c4c8f71dc3eecb4a1d
+    m_Address: Assets/Domain/UI/Prefabs/AbilityButton.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - World
+  - m_GUID: e10391f061874f24d940aae647744cc0
+    m_Address: Assets/Domain/UI/Prefabs/CreatureInspector.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - World
+  - m_GUID: b6abada5d2821ee44bb20abfeae8b67c
+    m_Address: Assets/Domain/UI/Prefabs/Effect.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - World
+  - m_GUID: bb0feb5ce0cf1d2438888f5afacaf673
+    m_Address: Assets/Domain/UI/Prefabs/HUD.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - World
+  - m_GUID: 9966ee49aeb63ea45997d3fe3f0e69b7
+    m_Address: Assets/Domain/UI/Prefabs/Info.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - World
+  - m_GUID: 14a6389202a29bf4d84d2a4810827532
+    m_Address: Assets/Domain/UI/Prefabs/Shop.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - World
+  - m_GUID: b258b1f0988e5ac45839d33b481bca0e
+    m_Address: Assets/Prefabs/MageBomb.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - World
+  - m_GUID: 25642cce9320f6f489250bd96c6a6814
+    m_Address: Assets/Prefabs/MageCurse.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - World
+  - m_GUID: e579c039fc59dfd45b2336f7d1fa9dc1
+    m_Address: Assets/Prefabs/NetworkPlayer.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - World
+  - m_GUID: 9030cd140356ad749b19b7b5a20221d6
+    m_Address: Assets/Prefabs/Player.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - World
+  - m_GUID: 022689f6865f5fb47bad3cbc0e715227
+    m_Address: Assets/Prefabs/Selection.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - World
+  - m_GUID: c87fa0d6180121d42a09aff518a98e33
+    m_Address: Assets/Prefabs/Whale.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - World
+  - m_GUID: dd9851bd26dd2db42be766e3124691ff
+    m_Address: Assets/Prefabs/Fireball.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - World
+  - m_GUID: 9fc0d4010bbf28b4594072e72b8655ab
+    m_Address: Assets/Scenes/1.World.unity
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - World
+    - WorldScene
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: d3cc77657f0a4b0428aadd1f8ec1d9c5, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: cef9e6399db28814a86bf10454091439, type: 2}
+    - {fileID: 11400000, guid: 123e837b3dd2cba43b89e71fd2edaf93, type: 2}

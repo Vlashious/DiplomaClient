@@ -7,5 +7,9 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Scenes/0.Loading.unity
+    guid: 35e7d64f35f59b842a515f5ac3121827
+  - enabled: 0
+    path: Assets/Scenes/1.World.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 24ab7dd903f33fb409f45d414d9160ff, type: 2}

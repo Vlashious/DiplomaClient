@@ -29,14 +29,14 @@ namespace Loading
 
         private IEnumerator OnStartButtonClicked()
         {
-            Addressables.ClearDependencyCacheAsync("default");
-            var downloadSize = Addressables.GetDownloadSizeAsync("default");
+            Addressables.ClearDependencyCacheAsync("World");
+            var downloadSize = Addressables.GetDownloadSizeAsync("World");
 
             yield return downloadSize;
 
             if (downloadSize.Result > 0)
             {
-                AsyncOperationHandle handle = Addressables.DownloadDependenciesAsync("default");
+                AsyncOperationHandle handle = Addressables.DownloadDependenciesAsync("World");
 
                 while (handle.Status is AsyncOperationStatus.None)
                 {
@@ -50,9 +50,9 @@ namespace Loading
                 Addressables.Release(handle);
             }
 
-            var scene = Addressables.LoadSceneAsync("1.World");
+            var scene = Addressables.LoadSceneAsync("WorldScene");
             yield return scene;
-            _sceneToLoad = scene.Result;
+            Addressables.Release(scene);
         }
     }
 }
